@@ -1,0 +1,41 @@
+# Environment variables - NEVER COMMIT THESE
+.env
+*.env
+.env.local
+.env.production
+.env.development
+
+# But DO commit example files
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+*.log
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Node
+node_modules/
+npm-debug.log*
+
+# Build
+/build
+/frontend/build
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store

@@ -1,0 +1,184 @@
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(135deg, #ffffff 0%, #f8fbff 100%);
+  box-shadow: 0 4px 12px rgba(0, 82, 204, 0.08);
+  padding: 1rem 2rem;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.navbar-logo {
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+.navbar-logo a {
+  color: #1e293b;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.navbar-logo a:hover {
+  color: #3b82f6;
+}
+
+.navbar-links {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  gap: 2rem;
+  margin: 0;
+}
+
+.navbar-links li {
+  font-size: 1rem;
+}
+
+.navbar-links a {
+  color: #475569;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.navbar-links a:hover {
+  color: #3b82f6;
+}
+
+.navbar-button {
+  background: none;
+  border: none;
+  color: #475569;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.navbar-button:hover {
+  color: #3b82f6;
+}
+
+.login-button {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  border: none;
+  font-weight: 600;
+}
+
+.login-button:hover {
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  color: white;
+}
+
+.book-appointment-btn {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.book-appointment-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+}
+
+.btn-text {
+  z-index: 1;
+}
+
+.btn-icon {
+  font-size: 1.2rem;
+  z-index: 1;
+}
+
+.btn-particles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.btn-particles span {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 50%;
+  animation: particle 2s infinite;
+}
+
+.btn-particles span:nth-child(1) { top: 10%; left: 20%; animation-delay: 0s; }
+.btn-particles span:nth-child(2) { top: 30%; left: 50%; animation-delay: 0.5s; }
+.btn-particles span:nth-child(3) { top: 60%; left: 30%; animation-delay: 1s; }
+.btn-particles span:nth-child(4) { top: 80%; left: 70%; animation-delay: 1.5s; }
+
+@keyframes particle {
+  0% { transform: translateY(0) scale(1); opacity: 0.8; }
+  100% { transform: translateY(-20px) scale(0); opacity: 0; }
+}
+
+.navbar-hamburger {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: none;
+}
+
+.hamburger-icon {
+  width: 24px;
+  height: 24px;
+  color: #475569;
+}
+
+.desktop-only {
+  display: block;
+}
+
+.mobile-only {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    padding: 1rem;
+  }
+
+  .navbar-links {
+    display: none; /* Hide links on mobile, rely on sidebar */
+  }
+
+  .navbar-hamburger {
+    display: block;
+  }
+
+  .desktop-only {
+    display: none;
+  }
+
+  .mobile-only {
+    display: block;
+  }
+
+  .book-appointment-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+}

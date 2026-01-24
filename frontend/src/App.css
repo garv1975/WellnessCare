@@ -1,0 +1,1384 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+.App {
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+}
+
+/* Utility Classes for Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes slideInFromTop {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}
+
+/* Navbar Styles with Enhanced Animations */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  padding: 1rem 2rem;
+  box-shadow: 0 4px 20px rgba(0, 82, 204, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: slideInFromTop 0.8s ease-out;
+}
+
+.navbar:hover {
+  box-shadow: 0 6px 30px rgba(0, 82, 204, 0.15);
+}
+
+.navbar-logo a {
+  color: #0052cc;
+  font-size: 1.8rem;
+  font-weight: 700;
+  text-decoration: none;
+  position: relative;
+  transition: all 0.3s ease;
+  background: linear-gradient(45deg, #0052cc, #0066ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.navbar-logo a:hover {
+  transform: scale(1.05);
+  filter: drop-shadow(0 0 10px rgba(0, 82, 204, 0.3));
+}
+
+.navbar-logo a::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 0;
+  height: 3px;
+  background: linear-gradient(45deg, #0052cc, #0066ff);
+  transition: width 0.3s ease;
+  border-radius: 2px;
+}
+
+.navbar-logo a:hover::after {
+  width: 100%;
+}
+
+.navbar-links {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: 0.5rem;
+}
+
+.navbar-links li {
+  position: relative;
+  overflow: hidden;
+}
+
+.navbar-links a {
+  color: #333;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 500;
+  padding: 0.75rem 1.25rem;
+  border-radius: 8px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.navbar-links a::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s;
+}
+
+.navbar-links a:hover {
+  color: #0052cc;
+  background: rgba(0, 82, 204, 0.05);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 82, 204, 0.1);
+}
+
+.navbar-links a:hover::before {
+  left: 100%;
+}
+
+.navbar-button {
+  background: linear-gradient(135deg, #0052cc, #0066ff);
+  color: #ffffff;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 82, 204, 0.2);
+}
+
+.navbar-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.navbar-button:hover {
+  background: linear-gradient(135deg, #003087, #0052cc);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 82, 204, 0.3);
+}
+
+.navbar-button:hover::before {
+  left: 100%;
+}
+
+.book-appointment-btn {
+  background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
+  color: #ffffff;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(255, 107, 107, 0.2);
+  animation: pulse 2s infinite;
+}
+
+.book-appointment-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.book-appointment-btn:hover {
+  background: linear-gradient(135deg, #ff5252, #ff6b6b);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(255, 107, 107, 0.3);
+  animation: none;
+}
+
+.book-appointment-btn:hover::before {
+  left: 100%;
+}
+
+/* Home Page Styles with Enhanced Animations */
+.home-container {
+  background: #ffffff;
+}
+
+.hero-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4rem 2rem;
+  background: linear-gradient(135deg, #e6f0fa 0%, #f0f8ff 100%);
+  position: relative;
+  overflow: hidden;
+  min-height: 80vh;
+}
+
+.hero-section::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(0, 82, 204, 0.05) 0%, transparent 70%);
+  animation: float 6s ease-in-out infinite;
+}
+
+.hero-content {
+  max-width: 50%;
+  z-index: 2;
+  animation: fadeInLeft 1s ease-out;
+}
+
+.hero-content h1 {
+  font-size: 3.5rem;
+  color: #333;
+  margin-bottom: 1rem;
+  font-weight: 700;
+  line-height: 1.2;
+  background: linear-gradient(135deg, #333 0%, #0052cc 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: fadeInUp 1s ease-out 0.2s both;
+}
+
+.hero-subtitle {
+  font-size: 1.5rem;
+  color: #666;
+  margin-bottom: 2rem;
+  font-weight: 400;
+  line-height: 1.6;
+  animation: fadeInUp 1s ease-out 0.4s both;
+}
+
+.cta-button {
+  display: inline-block;
+  background: linear-gradient(135deg, #0052cc, #0066ff);
+  color: #ffffff;
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  text-decoration: none;
+  font-weight: 600;
+  margin-right: 1rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 6px 20px rgba(0, 82, 204, 0.2);
+  animation: fadeInUp 1s ease-out 0.6s both;
+}
+
+.cta-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.cta-button:hover {
+  background: linear-gradient(135deg, #003087, #0052cc);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(0, 82, 204, 0.3);
+}
+
+.cta-button:hover::before {
+  left: 100%;
+}
+
+.learn-more-btn {
+  display: inline-block;
+  color: #0052cc;
+  padding: 1rem 2rem;
+  border: 2px solid #0052cc;
+  border-radius: 12px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  animation: fadeInUp 1s ease-out 0.8s both;
+}
+
+.learn-more-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 100%;
+  background: linear-gradient(135deg, #0052cc, #0066ff);
+  transition: width 0.3s ease;
+  z-index: -1;
+}
+
+.learn-more-btn:hover {
+  color: #ffffff;
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(0, 82, 204, 0.2);
+}
+
+.learn-more-btn:hover::before {
+  width: 100%;
+}
+
+.hero-image {
+  max-width: 40%;
+  animation: fadeInRight 1s ease-out 0.4s both;
+}
+
+.image-placeholder {
+  background: linear-gradient(135deg, #f0f0f0, #ffffff);
+  padding: 3rem;
+  text-align: center;
+  border-radius: 20px;
+  color: #666;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  animation: float 4s ease-in-out infinite;
+}
+
+.image-placeholder:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+}
+
+.stats-section {
+  display: flex;
+  justify-content: space-around;
+  padding: 4rem 2rem;
+  background: #ffffff;
+  animation: fadeInUp 1s ease-out;
+}
+
+.stat-item {
+  text-align: center;
+  transition: all 0.3s ease;
+  padding: 1rem;
+  border-radius: 12px;
+}
+
+.stat-item:hover {
+  transform: translateY(-10px);
+  background: rgba(0, 82, 204, 0.02);
+  box-shadow: 0 10px 30px rgba(0, 82, 204, 0.1);
+}
+
+.stat-item h3 {
+  font-size: 3rem;
+  color: #0052cc;
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #0052cc, #0066ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  transition: all 0.3s ease;
+}
+
+.stat-item:hover h3 {
+  transform: scale(1.1);
+}
+
+.stat-item p {
+  font-size: 1.1rem;
+  color: #666;
+  font-weight: 500;
+}
+
+.why-choose-section {
+  padding: 4rem 2rem;
+  text-align: center;
+  background: linear-gradient(135deg, #f8fbff 0%, #ffffff 100%);
+}
+
+.why-choose-section h2 {
+  font-size: 3rem;
+  color: #333;
+  margin-bottom: 1rem;
+  font-weight: 700;
+  animation: fadeInUp 1s ease-out;
+}
+
+.section-subtitle {
+  font-size: 1.3rem;
+  color: #666;
+  margin-bottom: 3rem;
+  font-weight: 400;
+  animation: fadeInUp 1s ease-out 0.2s both;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+}
+
+.feature-card {
+  background: #ffffff;
+  padding: 2.5rem;
+  border-radius: 20px;
+  text-align: center;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  animation: fadeInUp 1s ease-out;
+}
+
+.feature-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 0;
+  background: linear-gradient(135deg, rgba(0, 82, 204, 0.05), rgba(0, 102, 255, 0.05));
+  transition: height 0.3s ease;
+  z-index: 1;
+}
+
+.feature-card:hover {
+  transform: translateY(-15px);
+  box-shadow: 0 20px 50px rgba(0, 82, 204, 0.15);
+}
+
+.feature-card:hover::before {
+  height: 100%;
+}
+
+.feature-card > * {
+  position: relative;
+  z-index: 2;
+}
+
+.feature-icon {
+  font-size: 3rem;
+  margin-bottom: 1.5rem;
+  transition: all 0.3s ease;
+  display: inline-block;
+}
+
+.feature-card:hover .feature-icon {
+  transform: scale(1.2) rotate(5deg);
+}
+
+.feature-card h3 {
+  font-size: 1.5rem;
+  color: #333;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.feature-card:hover h3 {
+  color: #0052cc;
+}
+
+.feature-card p {
+  color: #666;
+  line-height: 1.6;
+  font-weight: 400;
+}
+
+.success-stories-section {
+  padding: 4rem 2rem;
+  background: linear-gradient(135deg, #f9f9f9 0%, #f0f8ff 100%);
+  text-align: center;
+}
+
+.success-stories-section h2 {
+  font-size: 3rem;
+  color: #333;
+  margin-bottom: 1rem;
+  font-weight: 700;
+  animation: fadeInUp 1s ease-out;
+}
+
+.stories-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.story-card {
+  background: #ffffff;
+  padding: 2.5rem;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  animation: fadeInUp 1s ease-out;
+}
+
+.story-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 0;
+  background: linear-gradient(135deg, rgba(255, 107, 107, 0.02), rgba(0, 82, 204, 0.02));
+  transition: height 0.3s ease;
+}
+
+.story-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+}
+
+.story-card:hover::before {
+  height: 100%;
+}
+
+.story-card > * {
+  position: relative;
+  z-index: 2;
+}
+
+.rating {
+  color: #f4c430;
+  margin-bottom: 1.5rem;
+  font-size: 1.2rem;
+  transition: transform 0.3s ease;
+}
+
+.story-card:hover .rating {
+  transform: scale(1.1);
+}
+
+.story-card p {
+  color: #666;
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+  font-style: italic;
+  font-size: 1.1rem;
+}
+
+.patient-info {
+  font-size: 1rem !important;
+  color: #333 !important;
+  font-style: normal !important;
+  font-weight: 600 !important;
+}
+
+.cta-section {
+  padding: 4rem 2rem;
+  background: linear-gradient(135deg, #0052cc, #0066ff);
+  text-align: center;
+  color: #ffffff;
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-section::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+  animation: float 8s ease-in-out infinite;
+}
+
+.cta-section h2 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
+  position: relative;
+  z-index: 2;
+  animation: fadeInUp 1s ease-out;
+}
+
+.cta-section p {
+  font-size: 1.3rem;
+  margin-bottom: 2rem;
+  position: relative;
+  z-index: 2;
+  animation: fadeInUp 1s ease-out 0.2s both;
+}
+
+.footer-section {
+  background: linear-gradient(135deg, #003087, #001a4d);
+  color: #ffffff;
+  padding: 3rem 2rem;
+  animation: fadeInUp 1s ease-out;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-bottom: 2rem;
+}
+
+.footer-logo h3 {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #ffffff, #e6f0fa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.footer-logo p {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  line-height: 1.6;
+  opacity: 0.9;
+}
+
+.footer-links h4, .footer-contact h4 {
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.footer-links ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-links li {
+  margin-bottom: 0.75rem;
+}
+
+.footer-links a {
+  color: #ffffff;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  opacity: 0.9;
+  font-weight: 400;
+}
+
+.footer-links a:hover {
+  opacity: 1;
+  color: #e6f0fa;
+  transform: translateX(5px);
+}
+
+.footer-contact p {
+  font-size: 1rem;
+  margin-bottom: 0.75rem;
+  opacity: 0.9;
+  line-height: 1.6;
+}
+
+.footer-bottom {
+  text-align: center;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.footer-bottom p {
+  font-size: 1rem;
+  opacity: 0.9;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1rem;
+  }
+
+  .navbar-links {
+    flex-direction: column;
+    width: 100%;
+    gap: 0;
+  }
+
+  .navbar-links li {
+    margin: 0.25rem 0;
+  }
+
+  .book-appointment-btn {
+    margin-top: 1rem;
+  }
+
+  .hero-section {
+    flex-direction: column;
+    text-align: center;
+    padding: 2rem 1rem;
+  }
+
+  .hero-content, .hero-image {
+    max-width: 100%;
+  }
+
+  .hero-content h1 {
+    font-size: 2.5rem;
+  }
+
+  .hero-image {
+    margin-top: 2rem;
+  }
+
+  .stats-section {
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .features-grid, .stories-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .footer-content {
+    flex-direction: column;
+    gap: 2rem;
+  }
+}
+
+/* Additional animations for specific elements */
+.feature-card:nth-child(1) { animation-delay: 0.1s; }
+.feature-card:nth-child(2) { animation-delay: 0.2s; }
+.feature-card:nth-child(3) { animation-delay: 0.3s; }
+.feature-card:nth-child(4) { animation-delay: 0.4s; }
+
+.story-card:nth-child(1) { animation-delay: 0.1s; }
+.story-card:nth-child(2) { animation-delay: 0.2s; }
+.story-card:nth-child(3) { animation-delay: 0.3s; }
+
+/* General Page Styles (for other pages) */
+.page {
+  padding: 2rem;
+  max-width: 800px;
+  margin: 0 auto;
+  animation: fadeInUp 1s ease-out;
+}
+/* Enhanced Navbar Styles with Advanced Animations and Hover Effects */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  padding: 1rem 2rem;
+  box-shadow: 0 4px 20px rgba(0, 82, 204, 0.08);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  animation: slideInFromTop 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  border-bottom: 1px solid rgba(0, 82, 204, 0.1);
+}
+
+.navbar:hover {
+  box-shadow: 0 8px 40px rgba(0, 82, 204, 0.12);
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+/* Enhanced Logo with Multiple Hover Effects */
+.navbar-logo a {
+  color: #0052cc;
+  font-size: 1.8rem;
+  font-weight: 700;
+  text-decoration: none;
+  position: relative;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  background: linear-gradient(135deg, #0052cc 0%, #0066ff 50%, #007bff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  background-size: 200% 200%;
+  animation: gradientShift 3s ease-in-out infinite;
+}
+
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.navbar-logo a:hover {
+  transform: scale(1.08) translateY(-2px);
+  filter: drop-shadow(0 4px 15px rgba(0, 82, 204, 0.4));
+  text-shadow: 0 0 20px rgba(0, 82, 204, 0.3);
+}
+
+.navbar-logo a::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: radial-gradient(circle, rgba(0, 82, 204, 0.2) 0%, transparent 70%);
+  border-radius: 50%;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transform: translate(-50%, -50%);
+  z-index: -1;
+}
+
+.navbar-logo a:hover::before {
+  width: 120%;
+  height: 120%;
+}
+
+.navbar-logo a::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #0052cc, #0066ff, #007bff);
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  border-radius: 2px;
+  box-shadow: 0 2px 10px rgba(0, 82, 204, 0.4);
+}
+
+.navbar-logo a:hover::after {
+  width: 100%;
+}
+
+/* Enhanced Navbar Links */
+.navbar-links {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: 0.25rem;
+}
+
+.navbar-links li {
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px;
+}
+
+.navbar-links a {
+  color: #333;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 500;
+  padding: 0.8rem 1.4rem;
+  border-radius: 10px;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  position: relative;
+  overflow: hidden;
+  display: block;
+}
+
+/* Shimmer effect on hover */
+.navbar-links a::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  transition: left 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  z-index: 1;
+}
+
+/* Background gradient effect */
+.navbar-links a::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(0, 82, 204, 0.1), rgba(0, 102, 255, 0.1));
+  opacity: 0;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  border-radius: 10px;
+  z-index: 0;
+}
+
+.navbar-links a:hover {
+  color: #0052cc;
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 6px 20px rgba(0, 82, 204, 0.15);
+  text-shadow: 0 2px 8px rgba(0, 82, 204, 0.2);
+}
+
+.navbar-links a:hover::before {
+  left: 100%;
+}
+
+.navbar-links a:hover::after {
+  opacity: 1;
+}
+
+/* Active state for current page */
+.navbar-links a.active {
+  color: #0052cc;
+  background: linear-gradient(135deg, rgba(0, 82, 204, 0.1), rgba(0, 102, 255, 0.1));
+  font-weight: 600;
+}
+
+/* Enhanced Navbar Button */
+.navbar-button {
+  background: linear-gradient(135deg, #0052cc 0%, #0066ff 50%, #007bff 100%);
+  color: #ffffff;
+  border: none;
+  padding: 0.8rem 1.6rem;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 82, 204, 0.2);
+  background-size: 200% 200%;
+  animation: gradientMove 4s ease-in-out infinite;
+}
+
+@keyframes gradientMove {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.navbar-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  transition: left 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.navbar-button::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transform: translate(-50%, -50%);
+}
+
+.navbar-button:hover {
+  background: linear-gradient(135deg, #003087 0%, #0052cc 50%, #0066ff 100%);
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 0 10px 30px rgba(0, 82, 204, 0.3);
+  animation: none;
+}
+
+.navbar-button:hover::before {
+  left: 100%;
+}
+
+.navbar-button:hover::after {
+  width: 200%;
+  height: 200%;
+}
+
+.navbar-button:active {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 6px 20px rgba(0, 82, 204, 0.25);
+}
+
+/* Enhanced Book Appointment Button */
+.book-appointment-btn {
+  background: linear-gradient(135deg, #ff6b6b 0%, #ff8e8e 50%, #ffb3b3 100%);
+  color: #ffffff;
+  padding: 0.8rem 1.6rem;
+  border-radius: 12px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(255, 107, 107, 0.2);
+  background-size: 200% 200%;
+  animation: gradientPulse 4s ease-in-out infinite;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+@keyframes gradientPulse {
+  0%, 100% { 
+    background-position: 0% 50%; 
+    box-shadow: 0 4px 15px rgba(255, 107, 107, 0.2);
+  }
+  50% { 
+    background-position: 100% 50%; 
+    box-shadow: 0 6px 20px rgba(255, 107, 107, 0.3);
+  }
+}
+
+/* Shimmer effect */
+.book-appointment-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  transition: left 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  z-index: 1;
+}
+
+/* Ripple effect background */
+.book-appointment-btn::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+  border-radius: 50%;
+  transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transform: translate(-50%, -50%);
+  z-index: 0;
+}
+
+/* Button text and icon styling */
+.btn-text {
+  position: relative;
+  z-index: 2;
+  transition: all 0.3s ease;
+  font-size: 18px;
+}
+
+.btn-icon {
+  position: relative;
+  z-index: 2;
+  font-size: 1.1rem;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  opacity: 0;
+  transform: translateX(-10px) scale(0.8);
+}
+
+/* Floating particles effect */
+.btn-particles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.btn-particles span {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 50%;
+  opacity: 0;
+  transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.btn-particles span:nth-child(1) {
+  top: 20%;
+  left: 20%;
+  animation-delay: 0s;
+}
+
+.btn-particles span:nth-child(2) {
+  top: 30%;
+  right: 25%;
+  animation-delay: 0.2s;
+}
+
+.btn-particles span:nth-child(3) {
+  bottom: 25%;
+  left: 30%;
+  animation-delay: 0.4s;
+}
+
+.btn-particles span:nth-child(4) {
+  bottom: 20%;
+  right: 20%;
+  animation-delay: 0.6s;
+}
+
+/* Main hover effect */
+.book-appointment-btn:hover {
+  background: linear-gradient(135deg, #ff4757 0%, #ff5252 50%, #ff6b6b 100%);
+  transform: translateY(-6px) scale(1.08);
+  box-shadow: 0 15px 40px rgba(255, 107, 107, 0.4);
+  animation: none;
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Shimmer on hover */
+.book-appointment-btn:hover::before {
+  left: 100%;
+}
+
+/* Ripple expansion on hover */
+.book-appointment-btn:hover::after {
+  width: 300%;
+  height: 300%;
+}
+
+/* Icon animation on hover */
+.book-appointment-btn:hover .btn-icon {
+  opacity: 1;
+  transform: translateX(0) scale(1.1) rotate(10deg);
+}
+
+/* Text effect on hover */
+.book-appointment-btn:hover .btn-text {
+  transform: translateX(-3px);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Particles animation on hover */
+.book-appointment-btn:hover .btn-particles span {
+  opacity: 1;
+  animation: floatParticles 1.5s ease-in-out infinite;
+}
+
+@keyframes floatParticles {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translateY(-8px) scale(1.2);
+    opacity: 1;
+  }
+}
+
+/* Active/Click state */
+.book-appointment-btn:active {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 8px 25px rgba(255, 107, 107, 0.35);
+}
+
+/* Focus state for accessibility */
+.book-appointment-btn:focus {
+  outline: 3px solid rgba(255, 107, 107, 0.5);
+  outline-offset: 2px;
+}
+
+/* Glow effect on focus */
+.book-appointment-btn:focus::before {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.6),
+    transparent
+  );
+}
+
+/* Loading state (optional) */
+.book-appointment-btn.loading {
+  pointer-events: none;
+  animation: pulse 1.5s infinite;
+}
+
+.book-appointment-btn.loading .btn-text::after {
+  content: '...';
+  animation: dots 1.5s infinite;
+}
+
+@keyframes dots {
+  0%, 20% { content: ''; }
+  40% { content: '.'; }
+  60% { content: '..'; }
+  80%, 100% { content: '...'; }
+}
+
+/* Success state animation (optional) */
+.book-appointment-btn.success {
+  background: linear-gradient(135deg, #2ecc71, #27ae60);
+  animation: successPulse 0.6s ease-out;
+}
+
+@keyframes successPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+.book-appointment-btn.success .btn-icon {
+  opacity: 1;
+  transform: scale(1.2);
+}
+
+.book-appointment-btn.success .btn-icon::before {
+  content: '✓';
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .book-appointment-btn {
+    padding: 1rem 1.5rem;
+    font-size: 0.9rem;
+    margin-top: 1rem;
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .book-appointment-btn:hover {
+    transform: translateY(-3px) scale(1.02);
+  }
+}
+
+@media (max-width: 480px) {
+  .book-appointment-btn {
+    padding: 0.8rem 1.2rem;
+    font-size: 0.85rem;
+  }
+  
+  .btn-text {
+    font-size: 0.85rem;
+  }
+}
+/* Loading state animation */
+@keyframes navbarLoad {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.navbar-links li {
+  animation: navbarLoad 0.6s ease-out;
+}
+
+.navbar-links li:nth-child(1) { animation-delay: 0.1s; }
+.navbar-links li:nth-child(2) { animation-delay: 0.2s; }
+.navbar-links li:nth-child(3) { animation-delay: 0.3s; }
+.navbar-links li:nth-child(4) { animation-delay: 0.4s; }
+.navbar-links li:nth-child(5) { animation-delay: 0.5s; }
+
+/* Scroll effect for navbar */
+.navbar.scrolled {
+  background: rgba(255, 255, 255, 0.98);
+  box-shadow: 0 8px 32px rgba(0, 82, 204, 0.15);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+/* Focus states for accessibility */
+.navbar-links a:focus,
+.navbar-button:focus,
+.book-appointment-btn:focus {
+  outline: 2px solid #0052cc;
+  outline-offset: 2px;
+}
+.hero-buttons {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 24px;
+}
+
+/* For mobile responsiveness */
+@media (max-width: 768px) {
+  .hero-buttons {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+  
+  .hero-buttons .learn-more-btn {
+    text-align: center;
+  }
+}
+.hero-image {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hero-img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 1rem;
+}
