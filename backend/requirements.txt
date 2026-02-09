@@ -11,3 +11,8 @@ Werkzeug==3.0.1
 python-dotenv==1.0.1
 gunicorn
 requests
+
+google-auth
+google-auth-oauthlib
+google-auth-httplib2
+google-api-python-client
