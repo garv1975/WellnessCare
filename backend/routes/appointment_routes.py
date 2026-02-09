@@ -184,7 +184,7 @@ def book_appointment():
         appointment = Appointment(
             user_id=user_id_int,
             doctor_id=data['doctor_id'],
-            time=data['time'],
+            time=appointment_time,
             reason=data['reason'],
             status='Scheduled'
         )

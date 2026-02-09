@@ -151,19 +151,26 @@ def google_login():
 @jwt_required()
 def logout():
     try:
-        user_id = get_jwt_identity()
-        logger.debug("Logout request for user: %s", user_id)
-        
-        # Clear chat state
-        if user_id in chat_state:
-            del chat_state[user_id]
-        
-        # Clear chat history
-        ChatMessage.query.filter_by(user_id=int(user_id)).delete()
+        identity = get_jwt_identity()
+        logger.debug("Logout request for identity: %s", identity)
+
+        # CASE 1: Doctor token
+        if isinstance(identity, str) and identity.startswith("doctor_"):
+            logger.info("Doctor logout detected, no chat cleanup needed")
+            return jsonify({"msg": "Doctor logged out successfully"}), 200
+
+        # CASE 2: User token
+        user_id = int(identity)
+
+        if str(user_id) in chat_state:
+            del chat_state[str(user_id)]
+
+        ChatMessage.query.filter_by(user_id=user_id).delete()
         db.session.commit()
-        
+
         logger.info("User logged out successfully: %s", user_id)
         return jsonify({"msg": "Logged out successfully"}), 200
+
     except Exception as e:
         logger.error("Logout failed: %s", str(e))
         return jsonify({"msg": f"Logout failed: {str(e)}"}), 500

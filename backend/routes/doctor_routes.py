@@ -202,7 +202,7 @@ def get_doctor_appointments():
         result = []
         for appointment in appointments:
             try:
-                appointment_datetime = datetime.strptime(appointment.time, '%Y-%m-%d %H:%M')
+                appointment_datetime = appointment.time
                 patient = User.query.get(appointment.user_id)
                 patient_email = patient.email if patient else "Unknown"
                 
@@ -220,7 +220,7 @@ def get_doctor_appointments():
                 logger.error("Invalid time format for appointment %d: %s", appointment.id, appointment.time)
                 continue
         
-        result.sort(key=lambda x: x['time'])
+        result.sort(key=lambda x: appointment_datetime)
         
         logger.info("Fetched %d appointments for doctor %d", len(result), doctor_id)
         return jsonify(result), 200
@@ -255,7 +255,7 @@ def verify_doctor_video_access(appointment_id):
             return jsonify({"msg": "Video call is only available for scheduled appointments"}), 400
         
         try:
-            appointment_time = datetime.strptime(appointment.time, '%Y-%m-%d %H:%M')
+            appointment_time = appointment.time
             current_time = datetime.now()
             start_window = appointment_time - timedelta(minutes=5)
             end_window = appointment_time + timedelta(minutes=30)
