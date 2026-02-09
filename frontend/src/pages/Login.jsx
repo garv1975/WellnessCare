@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { GoogleLogin } from '@react-oauth/google';
 import { ChatbotContext } from '../App';
 import API from '../api';
@@ -9,12 +9,21 @@ export default function Login() {
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const { setChatbotOpen } = useContext(ChatbotContext);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const toggleMobileMenu = () => {
+    setMobileMenuOpen(!mobileMenuOpen);
+  };
+
+  const closeMobileMenu = () => {
+    setMobileMenuOpen(false);
   };
 
   const handleSubmit = async (e) => {
@@ -183,6 +192,67 @@ export default function Login() {
   return (
     <div className="auth-container">
       <div className="particles" id="particles"></div>
+      
+      {/* Hamburger Menu Button */}
+      <button 
+        className={`hamburger-menu ${mobileMenuOpen ? 'active' : ''}`}
+        onClick={toggleMobileMenu}
+        aria-label="Toggle mobile menu"
+      >
+        <div className="hamburger-icon">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </button>
+
+      {/* Mobile Menu Overlay */}
+      <div 
+        className={`mobile-menu-overlay ${mobileMenuOpen ? 'active' : ''}`}
+        onClick={closeMobileMenu}
+      ></div>
+
+      {/* Mobile Menu */}
+      <div className={`mobile-menu ${mobileMenuOpen ? 'active' : ''}`}>
+        <div className="mobile-menu-header">
+          <h3>Menu</h3>
+          <button 
+            className="mobile-menu-close"
+            onClick={closeMobileMenu}
+            aria-label="Close menu"
+          >
+            ✕
+          </button>
+        </div>
+        <div className="mobile-menu-content">
+          <ul className="mobile-menu-links">
+            <li>
+              <Link to="/" onClick={closeMobileMenu}>Home</Link>
+            </li>
+            <li>
+              <Link to="/about" onClick={closeMobileMenu}>About</Link>
+            </li>
+            <li>
+              <Link to="/services" onClick={closeMobileMenu}>Services</Link>
+            </li>
+            <li>
+              <Link to="/faqs" onClick={closeMobileMenu}>FAQs</Link>
+            </li>
+            <li>
+              <button 
+                className="login-button"
+                onClick={() => {
+                  closeMobileMenu();
+                  navigate('/signup');
+                }}
+              >
+                Sign Up
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+
       <div className="auth-wrapper">
         <div className="auth-form fade-in">
           <h2>Sign In to Your Account</h2>
@@ -267,4 +337,3 @@ export default function Login() {
     </div>
   );
 }
-
