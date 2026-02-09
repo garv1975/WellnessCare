@@ -1,8 +1,13 @@
 import axios from 'axios';
 
 const API = axios.create({
-  baseURL: 'http://localhost:5000/api',
+  baseURL: process.env.REACT_APP_API_URL 
+    ? `${process.env.REACT_APP_API_URL}/api`
+    : 'http://localhost:5000/api',   // fallback only for local dev
 });
+
+// Rest of your interceptors stay exactly the same...
+// (request interceptor, response interceptor, etc.)
 
 API.interceptors.request.use((req) => {
   const patientToken = localStorage.getItem('token');
