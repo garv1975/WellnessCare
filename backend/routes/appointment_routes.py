@@ -463,20 +463,17 @@ def verify_video_access(appointment_id):
             logger.warning(f"Cannot access video for appointment with status {appointment.status}: ID {appointment_id}")
             return jsonify({"msg": "Video call is only available for scheduled appointments"}), 400
         
-        try:
-            appointment_time = datetime.strptime(appointment.time, '%Y-%m-%d %H:%M')
-            current_time = datetime.now()
-            start_window = appointment_time - timedelta(minutes=5)
-            end_window = appointment_time + timedelta(minutes=30)
-            
-            if not (start_window <= current_time <= end_window):
-                logger.warning(f"Video call access outside time window: Appointment ID {appointment_id}, Current time {current_time}")
-                return jsonify({
-                    "msg": "Video call is only available within 5 minutes before to 30 minutes after the scheduled time"
-                }), 403
-        except ValueError:
-            logger.error(f"Invalid appointment time format: {appointment.time}")
-            return jsonify({"msg": "Invalid appointment time format"}), 400
+        appointment_time = appointment.time  # already datetime
+        current_time = datetime.now()
+
+        start_window = appointment_time - timedelta(minutes=5)
+        end_window = appointment_time + timedelta(minutes=30)
+
+        if not (start_window <= current_time <= end_window):
+          return jsonify({
+             "msg": "Video call is only available within 5 minutes before to 30 minutes after the scheduled time"
+          }), 403
+
         
         doctor = Doctor.query.get(appointment.doctor_id)
         if not doctor:
