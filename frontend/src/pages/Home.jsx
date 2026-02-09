@@ -1,12 +1,31 @@
-import React from 'react';
+import React, { useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { ChatbotContext } from '../App';
+import API from '../api';
+import './Home.css';
 
 export default function Home() {
   const navigate = useNavigate();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { setChatbotOpen } = useContext(ChatbotContext);
+  
+  const token = localStorage.getItem('token');
+  const doctorToken = localStorage.getItem('doctor_token');
+  const doctorRole = localStorage.getItem('doctor_role');
+  const isPatientLoggedIn = !!token && !doctorRole;
+  const isDoctorLoggedIn = !!doctorToken && doctorRole === 'doctor';
+  const isLoggedIn = isPatientLoggedIn || isDoctorLoggedIn;
+
+  const toggleMobileMenu = () => {
+    setMobileMenuOpen(!mobileMenuOpen);
+  };
+
+  const closeMobileMenu = () => {
+    setMobileMenuOpen(false);
+  };
 
   const handleConsultationClick = () => {
     console.log('Book Free Consultation button clicked');
-    const token = localStorage.getItem('token');
     console.log('Token exists:', !!token);
     if (token) {
       console.log('Navigating to /book-appointment');
@@ -17,8 +36,133 @@ export default function Home() {
     }
   };
 
+  const handleLogout = async () => {
+    console.log('Initiating logout...');
+    try {
+      await API.post('/auth/logout');
+      clearLocalStorage();
+      setChatbotOpen(false);
+      closeMobileMenu();
+      navigate('/login');
+      alert('Logged out successfully!');
+    } catch (err) {
+      console.error('Logout error:', err);
+      clearLocalStorage();
+      setChatbotOpen(false);
+      closeMobileMenu();
+      navigate('/login');
+      alert('Logged out, but there was an issue contacting the server.');
+    }
+  };
+
+  const clearLocalStorage = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user_id');
+    localStorage.removeItem('doctor_token');
+    localStorage.removeItem('doctor_id');
+    localStorage.removeItem('doctor_role');
+    localStorage.removeItem('doctor_info');
+  };
+
+  const handleDashboardClick = () => {
+    closeMobileMenu();
+    if (isDoctorLoggedIn) {
+      navigate('/doctor/dashboard');
+    } else {
+      navigate('/dashboard');
+    }
+  };
+
+  const handlePatientLogin = () => {
+    clearLocalStorage();
+    closeMobileMenu();
+    navigate('/login');
+  };
+
+  const handleDoctorLogin = () => {
+    clearLocalStorage();
+    closeMobileMenu();
+    navigate('/doctor/login');
+  };
+
   return (
     <div className="home-container">
+      {/* Hamburger Menu Button */}
+      <button 
+        className={`hamburger-menu ${mobileMenuOpen ? 'active' : ''}`}
+        onClick={toggleMobileMenu}
+        aria-label="Toggle mobile menu"
+      >
+        <div className="hamburger-icon">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </button>
+
+      {/* Mobile Menu Overlay */}
+      <div 
+        className={`mobile-menu-overlay ${mobileMenuOpen ? 'active' : ''}`}
+        onClick={closeMobileMenu}
+      ></div>
+
+      {/* Mobile Menu */}
+      <div className={`mobile-menu ${mobileMenuOpen ? 'active' : ''}`}>
+        <div className="mobile-menu-header">
+          <h3>Menu</h3>
+          <button 
+            className="mobile-menu-close"
+            onClick={closeMobileMenu}
+            aria-label="Close menu"
+          >
+            ✕
+          </button>
+        </div>
+        <div className="mobile-menu-content">
+          <ul className="mobile-menu-links">
+            <li>
+              <Link to="/" onClick={closeMobileMenu}>Home</Link>
+            </li>
+            <li>
+              <Link to="/about" onClick={closeMobileMenu}>About</Link>
+            </li>
+            <li>
+              <Link to="/services" onClick={closeMobileMenu}>Services</Link>
+            </li>
+            <li>
+              <Link to="/faqs" onClick={closeMobileMenu}>FAQs</Link>
+            </li>
+            {isLoggedIn ? (
+              <>
+                <li>
+                  <button onClick={handleDashboardClick}>
+                    {isDoctorLoggedIn ? 'Doctor Dashboard' : 'Dashboard'}
+                  </button>
+                </li>
+                <li>
+                  <button className="logout-button" onClick={handleLogout}>
+                    Logout
+                  </button>
+                </li>
+              </>
+            ) : (
+              <>
+                <li>
+                  <button className="login-button" onClick={handlePatientLogin}>
+                    Log In as Patient
+                  </button>
+                </li>
+                <li>
+                  <button className="login-button" onClick={handleDoctorLogin}>
+                    Log In as Doctor
+                  </button>
+                </li>
+              </>
+            )}
+          </ul>
+        </div>
+      </div>
+
       {/* Hero Section */}
       <section className="hero-section">
         <div className="hero-content">
@@ -43,8 +187,6 @@ export default function Home() {
             className="hero-img"
           />
         </div>
-
-
       </section>
 
       {/* Stats Section */}
