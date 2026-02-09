@@ -1,10 +1,7 @@
 import axios from 'axios';
 
-const baseURL = import.meta.env.REACT_APP_API_URL 
-  || 'http://localhost:5000/api';   // fallback for local dev
-
 const API = axios.create({
-  baseURL,
+  baseURL: 'http://localhost:5000/api',
 });
 
 API.interceptors.request.use((req) => {
