@@ -16,6 +16,7 @@ export default function DoctorVideoCall() {
   const [patientConnected, setPatientConnected] = useState(false);
   const [isCompletingAppointment, setIsCompletingAppointment] = useState(false);
   const [isEndingCall, setIsEndingCall] = useState(false);
+  const [isSwapped, setIsSwapped] = useState(false);
   const localVideoRef = useRef(null);
   const remoteVideoRef = useRef(null);
   const clientRef = useRef(null);
@@ -34,7 +35,6 @@ export default function DoctorVideoCall() {
       return;
     }
 
-    // Ensure the API has the auth token
     API.defaults.headers.common['Authorization'] = `Bearer ${doctorToken}`;
 
     const verifyAccess = async () => {
@@ -80,7 +80,6 @@ export default function DoctorVideoCall() {
   }, [appointmentId, navigate]);
 
   useEffect(() => {
-    // Prevent multiple initializations
     if (!accessData || !localVideoRef.current || !remoteVideoRef.current || hasJoinedRef.current || isJoining) {
       console.log('Skipping Agora initialization:', {
         accessData: !!accessData,
@@ -92,7 +91,6 @@ export default function DoctorVideoCall() {
       return;
     }
 
-    // Add a small delay to ensure DOM elements are fully rendered
     const timer = setTimeout(() => {
       initAgoraCall();
     }, 100);
@@ -103,7 +101,6 @@ export default function DoctorVideoCall() {
   const cleanupVideoCall = async () => {
     console.log('Cleaning up video call resources');
     
-    // Stop and close local tracks
     if (localTracksRef.current.audioTrack) {
       localTracksRef.current.audioTrack.stop();
       localTracksRef.current.audioTrack.close();
@@ -115,7 +112,6 @@ export default function DoctorVideoCall() {
       localTracksRef.current.videoTrack = null;
     }
     
-    // Leave the channel
     if (clientRef.current && hasJoinedRef.current) {
       const connectionState = clientRef.current.connectionState;
       if (connectionState === 'CONNECTED' || connectionState === 'CONNECTING') {
@@ -175,7 +171,6 @@ export default function DoctorVideoCall() {
       setPatientConnected(false);
       console.log('Call ended successfully, navigating to dashboard');
       
-      // Check if user is still authenticated before navigating
       const doctorToken = localStorage.getItem('doctor_token');
       if (doctorToken) {
         navigate('/doctor/dashboard', { replace: true });
@@ -185,7 +180,6 @@ export default function DoctorVideoCall() {
       
     } catch (error) {
       console.error('Error ending call:', error);
-      // Even if there's an error, still navigate away
       const doctorToken = localStorage.getItem('doctor_token');
       if (doctorToken) {
         navigate('/doctor/dashboard', { replace: true });
@@ -222,20 +216,17 @@ export default function DoctorVideoCall() {
         throw new Error('Missing required video call data (channel or token)');
       }
 
-      // Ensure UID is a number or null for auto-assignment
       if (uid && typeof uid === 'string') {
         uid = parseInt(uid, 10);
         if (isNaN(uid)) {
-          uid = null; // Let Agora auto-assign
+          uid = null;
         }
       }
 
-      // Double-check DOM elements before proceeding
       if (!localVideoRef.current || !remoteVideoRef.current) {
         throw new Error('Video container elements not available');
       }
 
-      // Clean up any existing client
       if (clientRef.current) {
         try {
           await clientRef.current.leave();
@@ -247,7 +238,6 @@ export default function DoctorVideoCall() {
       clientRef.current = AgoraRTC.createClient({ mode: 'rtc', codec: 'vp8' });
       const client = clientRef.current;
 
-      // Set up event handlers before joining
       client.on('user-published', async (user, mediaType) => {
         try {
           console.log('User published:', user.uid, mediaType);
@@ -272,15 +262,12 @@ export default function DoctorVideoCall() {
         }
       });
 
-      // Handle remote users leaving - this is key for ending call on both sides
       client.on('user-left', (user) => {
         console.log('Patient left the call:', user.uid);
         setPatientConnected(false);
         
-        // Show notification that patient left
         showNotification('Patient has left the consultation', 'info');
         
-        // Auto-end call after a short delay
         setTimeout(() => {
           if (!isEndingCallRef.current) {
             endCall();
@@ -299,7 +286,6 @@ export default function DoctorVideoCall() {
 
       console.log('Joining Agora channel:', channel, 'with UID:', uid);
       
-      // Join the channel with retry logic for UID conflicts
       let joinAttempts = 0;
       const maxAttempts = 3;
       
@@ -325,7 +311,6 @@ export default function DoctorVideoCall() {
 
       setConnectionStatus('connected');
 
-      // Create and publish local tracks
       try {
         localTracksRef.current.audioTrack = await AgoraRTC.createMicrophoneAudioTrack({
           encoderConfig: 'music_standard',
@@ -334,11 +319,9 @@ export default function DoctorVideoCall() {
           encoderConfig: '480p_1',
         });
 
-        // Publish tracks
         await client.publish([localTracksRef.current.audioTrack, localTracksRef.current.videoTrack]);
         console.log('Published local tracks');
 
-        // Play local video
         if (localTracksRef.current.videoTrack && localVideoRef.current) {
           localTracksRef.current.videoTrack.play(localVideoRef.current);
         }
@@ -375,26 +358,22 @@ export default function DoctorVideoCall() {
 
   const handleCompleteAppointment = async () => {
     if (isCompletingAppointment) {
-      return; // Prevent multiple clicks
+      return;
     }
 
     try {
       setIsCompletingAppointment(true);
       console.log('Marking appointment as complete:', appointmentId);
       
-      // Ensure we have the auth token before making the API call
       const doctorToken = localStorage.getItem('doctor_token');
       if (!doctorToken) {
         throw new Error('Authentication token not found. Please log in again.');
       }
       
-      // Make sure the API has the current token
       API.defaults.headers.common['Authorization'] = `Bearer ${doctorToken}`;
       
-      // Make the API call to complete the appointment
       await API.put(`/doctor/appointments/${appointmentId}/complete`);
       
-      // Show success message with animation
       const successDiv = document.createElement('div');
       successDiv.innerHTML = '✅ Appointment completed successfully!';
       successDiv.style.cssText = `
@@ -415,14 +394,12 @@ export default function DoctorVideoCall() {
       
       document.body.appendChild(successDiv);
       
-      // Clean up video call resources before navigating
       try {
         await cleanupVideoCall();
       } catch (cleanupError) {
         console.error('Cleanup error during completion:', cleanupError);
       }
       
-      // Navigate to dashboard after showing success message
       setTimeout(() => {
         if (document.body.contains(successDiv)) {
           document.body.removeChild(successDiv);
@@ -433,9 +410,7 @@ export default function DoctorVideoCall() {
     } catch (err) {
       console.error('Complete appointment error:', err.response || err);
       
-      // Handle specific error cases
       if (err.response?.status === 401 || err.response?.status === 403) {
-        // Only clear auth data if we get a clear authentication error
         console.log('Authentication error during appointment completion');
         localStorage.removeItem('doctor_token');
         localStorage.removeItem('doctor_id');
@@ -443,11 +418,8 @@ export default function DoctorVideoCall() {
         localStorage.removeItem('doctor_info');
         navigate('/doctor/login');
       } else {
-        // For other errors, just show the error message without redirecting
         const errorMessage = err.response?.data?.msg || err.message || 'Failed to complete appointment';
         setError(errorMessage);
-        
-        // Show error message
         showNotification(`❌ ${errorMessage}`, 'error');
       }
     } finally {
@@ -456,7 +428,6 @@ export default function DoctorVideoCall() {
   };
 
   const handleRefreshCall = () => {
-    // Add loading animation before refresh
     const loadingDiv = document.createElement('div');
     loadingDiv.innerHTML = '🔄 Refreshing call...';
     loadingDiv.style.cssText = `
@@ -481,7 +452,10 @@ export default function DoctorVideoCall() {
     }, 1000);
   };
 
-  // Handle browser back button or page refresh
+  const handleSwapVideos = () => {
+    setIsSwapped(!isSwapped);
+  };
+
   useEffect(() => {
     const handleBeforeUnload = (e) => {
       if (callStarted && !isEndingCallRef.current) {
@@ -562,7 +536,6 @@ export default function DoctorVideoCall() {
 
   return (
     <div className="video-call-container" style={{ minHeight: '100vh' }}>
-      {/* Connection Status Indicator */}
       <div className={`connection-status ${statusDisplay.class}`}>
         {statusDisplay.text}
       </div>
@@ -573,7 +546,6 @@ export default function DoctorVideoCall() {
         {accessData && (
           <>
             <p><strong>Room:</strong> {accessData.room_id}</p>
-            <p><strong>Patient ID:</strong> {accessData.patient_user_id}</p>
             {patientConnected && (
               <p style={{ color: '#10b981', fontWeight: '600' }}>
                 👥 Patient is connected
@@ -585,11 +557,16 @@ export default function DoctorVideoCall() {
 
       <div className="call-container">
         <div className="video-section">
-          <div className="video-wrapper">
-            <h3>👨‍⚕️ Your Video (Doctor)</h3>
+          <div className="video-wrapper" style={{ order: isSwapped ? 2 : 1 }}>
+            <h3>
+              <span>👨‍⚕️ Your Video (Doctor)</span>
+              <button className="swap-button" onClick={handleSwapVideos}>
+                🔄 Swap
+              </button>
+            </h3>
             <div ref={localVideoRef} className="video-player"></div>
           </div>
-          <div className="video-wrapper">
+          <div className="video-wrapper" style={{ order: isSwapped ? 1 : 2 }}>
             <h3>👤 Patient's Video</h3>
             <div ref={remoteVideoRef} className="video-player">
               {!patientConnected && (
@@ -614,7 +591,6 @@ export default function DoctorVideoCall() {
             className="end-call-button" 
             onClick={endCall}
             disabled={isEndingCall}
-            style={{ marginRight: '10px' }}
           >
             {isEndingCall ? '📞 Ending...' : '📞 End Call'}
           </button>
