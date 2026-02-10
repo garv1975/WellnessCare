@@ -357,6 +357,10 @@
   width: calc(100% - 3rem) !important;
   text-align: center !important;
   box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
 }
 
 .mobile-book-btn:hover {

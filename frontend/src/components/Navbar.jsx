@@ -47,6 +47,7 @@ export default function Navbar() {
 
   const handleBookAppointment = () => {
     console.log('Book Appointment clicked, isLoggedIn:', isLoggedIn);
+    setIsMobileMenuOpen(false);
     if (isLoggedIn) {
       navigate('/book-appointment');
     } else {
@@ -180,6 +181,12 @@ export default function Navbar() {
           </button>
         </div>
         <div className="mobile-menu-content">
+          {/* Book Appointment Button - Mobile (at top) */}
+          <button onClick={handleBookAppointment} className="mobile-book-btn">
+            <span>📅</span>
+            <span>Book Appointment</span>
+          </button>
+          
           <ul className="mobile-menu-links">
             <li>
               <Link to="/" onClick={closeMobileMenu}>Home</Link>
@@ -226,12 +233,6 @@ export default function Navbar() {
                 </li>
               </>
             )}
-            {/* Book Appointment Button - Mobile */}
-            <li>
-              <button onClick={() => { handleBookAppointment(); closeMobileMenu(); }} className="mobile-book-btn">
-                📅 Book Appointment
-              </button>
-            </li>
           </ul>
         </div>
       </div>

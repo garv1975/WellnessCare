@@ -1,4 +1,4 @@
-/* VideoCall.css - Updated with WellnessCare Design */
+/* VideoCall.css - Mobile-Responsive Design like Google Meet */
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
@@ -105,6 +105,7 @@
   height: 100%;
   max-height: 600px;
   animation: scaleIn 0.8s ease-out 0.6s both;
+  position: relative;
 }
 
 @keyframes scaleIn {
@@ -149,6 +150,10 @@
   text-align: center;
   position: relative;
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
 }
 
 .video-wrapper h3::before {
@@ -166,6 +171,27 @@
   left: 100%;
 }
 
+.swap-button {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.3s ease;
+  position: absolute;
+  right: 16px;
+}
+
+.swap-button:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.05);
+}
+
 .video-player {
   flex: 1;
   width: 100%;
@@ -180,7 +206,7 @@
 }
 
 .video-player::before {
-  content: '📹';
+  content: '🎥';
   font-size: 4rem;
   opacity: 0.3;
   position: absolute;
@@ -303,6 +329,11 @@
   box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
 }
 
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
 .loading-container p {
   color: white;
   font-size: 1.2rem;
@@ -386,59 +417,33 @@
   left: 100%;
 }
 
-/* Responsive Design */
+/* Responsive Design - Mobile First */
 @media (max-width: 768px) {
-  .video-section {
-    grid-template-columns: 1fr;
-    gap: 20px;
-    max-height: none;
-  }
-  
   .call-header {
     padding: 15px 20px;
   }
   
   .call-header h2 {
-    font-size: 1.8rem;
-  }
-  
-  .call-container {
-    padding: 20px;
-  }
-  
-  .video-wrapper {
-    border-radius: 15px;
-  }
-  
-  .video-player {
-    min-height: 250px;
-  }
-  
-  .call-footer {
-    padding: 20px;
-  }
-  
-  .error-container {
-    margin: 20px;
-    padding: 30px;
-  }
-}
-
-@media (max-width: 480px) {
-  .call-header h2 {
     font-size: 1.5rem;
+  }
+  
+  .call-header p {
+    font-size: 0.9rem;
   }
   
   .call-container {
     padding: 15px;
   }
   
+  /* Stack videos vertically on mobile */
   .video-section {
+    grid-template-columns: 1fr;
     gap: 15px;
+    max-height: none;
   }
   
-  .video-player {
-    min-height: 200px;
+  .video-wrapper {
+    border-radius: 15px;
   }
   
   .video-wrapper h3 {
@@ -446,9 +451,132 @@
     font-size: 1rem;
   }
   
-  .end-call-button,
+  .swap-button {
+    padding: 5px 10px;
+    font-size: 0.75rem;
+    right: 12px;
+  }
+  
+  /* Optimize video player size for mobile */
+  .video-player {
+    min-height: 250px;
+    height: 300px;
+  }
+  
+  .call-footer {
+    padding: 20px 15px;
+  }
+  
+  .call-status {
+    font-size: 1rem;
+    margin-bottom: 12px;
+  }
+  
+  .end-call-button {
+    padding: 12px 24px;
+    font-size: 1rem;
+    width: 100%;
+    max-width: 300px;
+  }
+  
+  .error-container {
+    margin: 20px 15px;
+    padding: 30px 20px;
+  }
+  
+  .error-icon {
+    font-size: 3rem;
+  }
+  
+  .error-message {
+    font-size: 1rem;
+  }
+  
   .back-button {
     padding: 12px 24px;
     font-size: 1rem;
+    width: 100%;
+    max-width: 300px;
+  }
+}
+
+@media (max-width: 480px) {
+  .call-header h2 {
+    font-size: 1.3rem;
+  }
+  
+  .call-header p {
+    font-size: 0.85rem;
+  }
+  
+  .call-container {
+    padding: 10px;
+  }
+  
+  .video-section {
+    gap: 10px;
+  }
+  
+  /* Smaller video on very small screens */
+  .video-player {
+    min-height: 200px;
+    height: 250px;
+  }
+  
+  .video-wrapper h3 {
+    padding: 10px 12px;
+    font-size: 0.9rem;
+  }
+  
+  .swap-button {
+    padding: 4px 8px;
+    font-size: 0.7rem;
+  }
+  
+  .end-call-button,
+  .back-button {
+    padding: 10px 20px;
+    font-size: 0.95rem;
+  }
+  
+  .loading-spinner {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .loading-container p {
+    font-size: 1rem;
+  }
+}
+
+/* Landscape mode optimization for phones */
+@media (max-width: 768px) and (orientation: landscape) {
+  .video-section {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    max-height: calc(100vh - 200px);
+  }
+  
+  .video-player {
+    min-height: 200px;
+    height: 100%;
+  }
+  
+  .call-header {
+    padding: 10px 20px;
+  }
+  
+  .call-header h2 {
+    font-size: 1.2rem;
+    margin-bottom: 5px;
+  }
+  
+  .call-header p {
+    font-size: 0.8rem;
+    margin: 3px 0;
+  }
+  
+  .call-footer {
+    padding: 15px 20px;
   }
 }

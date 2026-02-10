@@ -13,6 +13,7 @@ export default function VideoCall() {
   const [callStarted, setCallStarted] = useState(false);
   const [connectionStatus, setConnectionStatus] = useState('Connecting...');
   const [doctorConnected, setDoctorConnected] = useState(false);
+  const [isSwapped, setIsSwapped] = useState(false);
   const localVideoRef = useRef(null);
   const remoteVideoRef = useRef(null);
   const clientRef = useRef(null);
@@ -108,7 +109,6 @@ export default function VideoCall() {
           throw new Error('Missing required video call data (channel or token)');
         }
 
-        // Ensure UID is a number and handle potential conflicts
         if (typeof uid === 'string') {
           uid = parseInt(uid, 10);
         }
@@ -118,7 +118,6 @@ export default function VideoCall() {
           console.log('Using auto-assigned UID');
         }
 
-        // Clean up any existing client before creating new one
         if (clientRef.current) {
           try {
             await clientRef.current.leave();
@@ -131,7 +130,6 @@ export default function VideoCall() {
         clientRef.current = AgoraRTC.createClient({ mode: 'rtc', codec: 'vp8' });
         const client = clientRef.current;
 
-        // Set up event handlers
         client.on('connection-state-change', (curState, revState) => {
           console.log('Connection state changed:', curState, 'from:', revState);
           setConnectionStatus(curState === 'CONNECTED' ? 'Connected' : 'Connecting...');
@@ -141,7 +139,6 @@ export default function VideoCall() {
           console.error('Agora client exception:', evt);
         });
 
-        // Handle remote users joining
         client.on('user-published', async (user, mediaType) => {
           try {
             console.log('User published:', user.uid, mediaType);
@@ -168,15 +165,12 @@ export default function VideoCall() {
           }
         });
 
-        // Handle remote users leaving - this is key for ending call on both sides
         client.on('user-left', (user) => {
           console.log('Doctor left the call:', user.uid);
           setDoctorConnected(false);
           
-          // Show notification that doctor left
           showNotification('Doctor has left the consultation', 'info');
           
-          // Auto-end call after a short delay
           setTimeout(() => {
             if (!isEndingCallRef.current) {
               endCall();
@@ -187,7 +181,6 @@ export default function VideoCall() {
         console.log('Joining Agora channel:', channel, 'with UID:', uid);
         setConnectionStatus('Joining video call...');
         
-        // Join with retry logic for UID conflicts
         let joinAttempts = 0;
         const maxAttempts = 3;
         
@@ -211,7 +204,6 @@ export default function VideoCall() {
           }
         }
 
-        // Create and publish local tracks
         try {
           setConnectionStatus('Setting up camera and microphone...');
           localTracksRef.current.audioTrack = await AgoraRTC.createMicrophoneAudioTrack({
@@ -228,25 +220,13 @@ export default function VideoCall() {
           setConnectionStatus('Call active');
           console.log('Patient successfully joined and published to channel:', channel);
         } catch (publishError) {
-          console.error('Error creating or publishing tracks:', publishError);
-          throw publishError;
+          console.error('Error publishing tracks:', publishError);
+          throw new Error('Failed to initialize camera/microphone. Please check permissions.');
         }
-
-      } catch (err) {
-        console.error('Agora initialization error:', err);
-        hasJoinedRef.current = false;
-        let errorMessage = 'Failed to initialize video call';
-        
-        if (err.code === 'UID_CONFLICT') {
-          errorMessage = 'Another session is already active. Please try again in a moment.';
-        } else if (err.code === 'INVALID_TOKEN') {
-          errorMessage = 'Video call session has expired. Please refresh and try again.';
-        } else if (err.message) {
-          errorMessage = err.message;
-        }
-        
-        setError(errorMessage);
-        setLoading(false);
+      } catch (error) {
+        console.error('Error initializing Agora call:', error);
+        setError(error.message || 'Failed to initialize video call');
+        setConnectionStatus('Connection failed');
       } finally {
         isJoiningRef.current = false;
       }
@@ -258,7 +238,6 @@ export default function VideoCall() {
   const cleanupVideoCall = async () => {
     console.log('Cleaning up video call resources');
     
-    // Stop and close local tracks
     if (localTracksRef.current.audioTrack) {
       localTracksRef.current.audioTrack.stop();
       localTracksRef.current.audioTrack.close();
@@ -270,7 +249,6 @@ export default function VideoCall() {
       localTracksRef.current.videoTrack = null;
     }
     
-    // Leave the channel
     if (clientRef.current && hasJoinedRef.current) {
       const connectionState = clientRef.current.connectionState;
       if (connectionState === 'CONNECTED' || connectionState === 'CONNECTING') {
@@ -329,7 +307,6 @@ export default function VideoCall() {
       setDoctorConnected(false);
       console.log('Call ended successfully, navigating to dashboard');
       
-      // Check if user is still authenticated before navigating
       const token = localStorage.getItem('token');
       if (token) {
         navigate('/dashboard', { replace: true });
@@ -339,7 +316,6 @@ export default function VideoCall() {
       
     } catch (error) {
       console.error('Error ending call:', error);
-      // Even if there's an error, still navigate away
       const token = localStorage.getItem('token');
       if (token) {
         navigate('/dashboard', { replace: true });
@@ -351,7 +327,10 @@ export default function VideoCall() {
     }
   };
 
-  // Handle browser back button or page refresh
+  const handleSwapVideos = () => {
+    setIsSwapped(!isSwapped);
+  };
+
   useEffect(() => {
     const handleBeforeUnload = (e) => {
       if (callStarted) {
@@ -426,7 +405,6 @@ export default function VideoCall() {
         {accessData && (
           <>
             <p><strong>Room:</strong> {accessData.room_id}</p>
-            <p><strong>Doctor ID:</strong> {accessData.doctor_user_id}</p>
             <p style={{ color: '#48bb78', fontWeight: '600' }}>
               Status: {connectionStatus}
             </p>
@@ -441,11 +419,16 @@ export default function VideoCall() {
       
       <div className="call-container">
         <div className="video-section">
-          <div className="video-wrapper">
-            <h3>👤 Your Video</h3>
+          <div className="video-wrapper" style={{ order: isSwapped ? 2 : 1 }}>
+            <h3>
+              <span>👤 Your Video</span>
+              <button className="swap-button" onClick={handleSwapVideos}>
+                🔄 Swap
+              </button>
+            </h3>
             <div ref={localVideoRef} className="video-player"></div>
           </div>
-          <div className="video-wrapper">
+          <div className="video-wrapper" style={{ order: isSwapped ? 1 : 2 }}>
             <h3>👨‍⚕️ Doctor's Video</h3>
             <div ref={remoteVideoRef} className="video-player">
               {!doctorConnected && (

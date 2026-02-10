@@ -1,4 +1,4 @@
-/* Enhanced Doctor Video Call Styles */
+/* Enhanced Doctor Video Call Styles - Mobile Responsive */
 
 .video-call-container {
   display: flex;
@@ -40,6 +40,8 @@
   border-radius: 20px;
   box-shadow: 0 8px 32px rgba(59, 130, 246, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.2);
+  width: 100%;
+  max-width: 1400px;
 }
 
 @keyframes slideDown {
@@ -131,6 +133,10 @@
   text-align: center;
   position: relative;
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
 }
 
 .video-wrapper h3::before {
@@ -148,6 +154,27 @@
   left: 100%;
 }
 
+.swap-button {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.3s ease;
+  position: absolute;
+  right: 16px;
+}
+
+.swap-button:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.05);
+}
+
 .video-player {
   width: 100%;
   height: 350px;
@@ -160,7 +187,7 @@
 }
 
 .video-player::before {
-  content: '📹';
+  content: '🎥';
   font-size: 3rem;
   color: rgba(255, 255, 255, 0.3);
   position: absolute;
@@ -177,6 +204,11 @@
 .call-footer {
   margin-top: 30px;
   animation: slideUp 0.8s ease-out 0.6s both;
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
 }
 
 @keyframes slideUp {
@@ -231,6 +263,27 @@
   transform: translateY(0);
 }
 
+.end-call-button {
+  padding: 16px 40px;
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 25px rgba(239, 68, 68, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.end-call-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 35px rgba(239, 68, 68, 0.4);
+  background: linear-gradient(135deg, #dc2626, #b91c1c);
+}
+
 .back-button {
   padding: 12px 30px;
   background: linear-gradient(135deg, #2563eb, #3b82f6);
@@ -242,7 +295,6 @@
   font-weight: 600;
   transition: all 0.3s ease;
   box-shadow: 0 6px 20px rgba(59, 130, 246, 0.3);
-  margin-left: 15px;
 }
 
 .back-button:hover {
@@ -262,7 +314,6 @@
   font-weight: 600;
   transition: all 0.3s ease;
   box-shadow: 0 6px 20px rgba(245, 158, 11, 0.3);
-  margin-right: 15px;
 }
 
 .refresh-button:hover {
@@ -358,61 +409,6 @@
   justify-content: center;
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-  .video-call-container {
-    padding: 15px;
-  }
-  
-  .call-header {
-    padding: 20px 25px;
-    margin-bottom: 20px;
-  }
-  
-  .call-header h2 {
-    font-size: 2rem;
-  }
-  
-  .video-section {
-    grid-template-columns: 1fr;
-    gap: 15px;
-    padding: 20px;
-  }
-  
-  .video-player {
-    height: 280px;
-  }
-  
-  .error-actions {
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .back-button,
-  .refresh-button {
-    margin: 5px 0;
-  }
-}
-
-@media (max-width: 480px) {
-  .call-header h2 {
-    font-size: 1.8rem;
-  }
-  
-  .video-section {
-    padding: 15px;
-  }
-  
-  .video-player {
-    height: 250px;
-  }
-  
-  .complete-button {
-    padding: 14px 30px;
-    font-size: 1rem;
-  }
-}
-
 /* Connection Status Indicator */
 .connection-status {
   position: fixed;
@@ -453,4 +449,180 @@
   background: linear-gradient(135deg, #ef4444, #dc2626);
   color: white;
   box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .video-call-container {
+    padding: 15px;
+  }
+  
+  .call-header {
+    padding: 20px 25px;
+    margin-bottom: 20px;
+  }
+  
+  .call-header h2 {
+    font-size: 1.8rem;
+  }
+  
+  .call-header p {
+    font-size: 0.95rem;
+  }
+  
+  /* Stack videos vertically on mobile */
+  .video-section {
+    grid-template-columns: 1fr;
+    gap: 15px;
+    padding: 20px;
+    min-height: auto;
+  }
+  
+  .video-wrapper h3 {
+    padding: 12px 16px;
+    font-size: 1rem;
+  }
+  
+  .swap-button {
+    padding: 5px 10px;
+    font-size: 0.75rem;
+    right: 12px;
+  }
+  
+  .video-player {
+    height: 280px;
+  }
+  
+  .call-footer {
+    flex-direction: column;
+    width: 100%;
+    max-width: 400px;
+    gap: 10px;
+  }
+  
+  .complete-button,
+  .end-call-button {
+    width: 100%;
+    padding: 14px 30px;
+    font-size: 1rem;
+  }
+  
+  .error-actions {
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+  
+  .back-button,
+  .refresh-button {
+    width: 100%;
+    max-width: 300px;
+  }
+  
+  .connection-status {
+    top: 10px;
+    right: 10px;
+    font-size: 0.8rem;
+    padding: 8px 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .video-call-container {
+    padding: 10px;
+  }
+  
+  .call-header {
+    padding: 15px 20px;
+  }
+  
+  .call-header h2 {
+    font-size: 1.5rem;
+  }
+  
+  .call-header p {
+    font-size: 0.85rem;
+  }
+  
+  .video-section {
+    padding: 15px;
+    gap: 10px;
+  }
+  
+  .video-player {
+    height: 250px;
+  }
+  
+  .video-wrapper h3 {
+    padding: 10px 12px;
+    font-size: 0.9rem;
+  }
+  
+  .swap-button {
+    padding: 4px 8px;
+    font-size: 0.7rem;
+  }
+  
+  .complete-button,
+  .end-call-button {
+    padding: 12px 24px;
+    font-size: 0.95rem;
+  }
+  
+  .loading-spinner {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .loading-container p {
+    font-size: 1rem;
+  }
+  
+  .error-icon {
+    font-size: 2.5rem;
+  }
+  
+  .error-message {
+    font-size: 1rem;
+  }
+}
+
+/* Landscape mode optimization for phones */
+@media (max-width: 768px) and (orientation: landscape) {
+  .video-section {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    padding: 15px;
+  }
+  
+  .video-player {
+    height: 250px;
+  }
+  
+  .call-header {
+    padding: 10px 20px;
+  }
+  
+  .call-header h2 {
+    font-size: 1.3rem;
+    margin-bottom: 5px;
+  }
+  
+  .call-header p {
+    font-size: 0.8rem;
+    margin: 3px 0;
+  }
+  
+  .call-footer {
+    flex-direction: row;
+    gap: 10px;
+    margin-top: 15px;
+  }
+  
+  .complete-button,
+  .end-call-button {
+    width: auto;
+    padding: 10px 20px;
+    font-size: 0.9rem;
+  }
 }
