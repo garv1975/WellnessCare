@@ -15,7 +15,7 @@ export default function BookAppointment() {
   const location = useLocation();
   const isRescheduling = !!location.state?.appointmentId;
 
-  // ---- local "now" for datetime-local min ----
+  // Local "now" adjusted for timezone offset → used for min attribute
   const nowLocal = new Date();
   nowLocal.setMinutes(nowLocal.getMinutes() - nowLocal.getTimezoneOffset());
   const minDateTime = nowLocal.toISOString().slice(0, 16);
@@ -32,35 +32,40 @@ export default function BookAppointment() {
         const response = await API.get('/doctors');
         setDoctors(response.data);
 
-        // -------- Rescheduling prefill --------
+        // Handle rescheduling pre-fill
         if (location.state?.doctorId) {
-          const doctor = response.data.find(d => d.id === location.state.doctorId);
+          const doctor = response.data.find((d) => d.id === location.state.doctorId);
           if (doctor) {
             setSelectedDoctor(doctor);
 
             let timeValue = '';
             if (location.state.time) {
               try {
+                // Assume backend sends time in UTC or parsable format
                 const date = new Date(location.state.time);
 
-                // UTC → LOCAL for datetime-local input
+                // Convert UTC → local time for datetime-local input
                 date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
-                timeValue = date.toISOString().slice(0, 16);
+                if (!isNaN(date.getTime())) {
+                  timeValue = date.toISOString().slice(0, 16);
+                }
               } catch (e) {
-                console.error('Time parse error:', e);
+                console.error('Failed to parse existing appointment time:', e);
               }
             }
 
             setFormData({
               time: timeValue,
-              reason: location.state.reason || ''
+              reason: location.state.reason || '',
             });
             setIsFormVisible(true);
           }
         }
       } catch (err) {
-        setError(err.response?.data?.msg || 'Failed to fetch doctors');
-        if (err.response?.status === 401) {
+        const errorMsg = err.response?.data?.msg || 'Failed to load doctors';
+        setError(errorMsg);
+
+        if (err.response?.status === 401 || err.response?.status === 422) {
           localStorage.removeItem('token');
           navigate('/login');
         }
@@ -87,38 +92,38 @@ export default function BookAppointment() {
     setError('');
 
     try {
-      // -------- LOCAL → UTC CONVERSION (KEY FIX) --------
       const localDate = new Date(formData.time);
 
       if (localDate < new Date()) {
         throw new Error('Cannot book appointments in the past');
       }
 
-      const utcISOString = localDate.toISOString(); // UTC
+      // Convert local time → UTC ISO string, then format to "YYYY-MM-DD HH:mm"
+      const utcISOString = localDate.toISOString();
       const timeFormatted = utcISOString.slice(0, 16).replace('T', ' ');
 
       const payload = {
         doctor_id: selectedDoctor.id,
         time: timeFormatted,
-        reason: formData.reason.trim()
+        reason: formData.reason.trim(),
       };
 
+      let response;
       if (isRescheduling) {
-        await API.put(
-          `/appointments/${location.state.appointmentId}`,
-          { time: timeFormatted }
-        );
+        response = await API.put(`/appointments/${location.state.appointmentId}`, {
+          time: timeFormatted,
+        });
       } else {
-        await API.post('/appointments/book', payload);
+        response = await API.post('/appointments/book', payload);
       }
 
-      alert(isRescheduling
-        ? 'Appointment rescheduled successfully!'
-        : 'Appointment booked successfully!'
+      alert(
+        isRescheduling
+          ? 'Appointment rescheduled successfully!'
+          : 'Appointment booked successfully!'
       );
 
       navigate('/dashboard', { state: { refresh: true } });
-
     } catch (err) {
       let msg = isRescheduling
         ? 'Rescheduling failed. Please try again.'
@@ -128,7 +133,7 @@ export default function BookAppointment() {
         msg = err.message;
       } else if (err.response) {
         msg = err.response.data?.msg || msg;
-        if (err.response.status === 401) {
+        if (err.response.status === 401 || err.response.status === 422) {
           localStorage.removeItem('token');
           navigate('/login');
         }
@@ -139,10 +144,12 @@ export default function BookAppointment() {
     }
   };
 
- return (
+  return (
     <div className="book-appointment-container">
       <div className="header-section">
-        <h2 className="page-title">{isRescheduling ? 'Reschedule Your Appointment' : 'Book Your Appointment'}</h2>
+        <h2 className="page-title">
+          {isRescheduling ? 'Reschedule Your Appointment' : 'Book Your Appointment'}
+        </h2>
         <p className="page-subtitle">Choose from our expert healthcare professionals</p>
       </div>
 
@@ -163,6 +170,7 @@ export default function BookAppointment() {
                 <p>Loading our expert doctors...</p>
               </div>
             )}
+
             {doctors.map((doctor, index) => (
               <div
                 key={doctor.id}
@@ -197,12 +205,16 @@ export default function BookAppointment() {
           {selectedDoctor ? (
             <div className="appointment-form">
               <div className="form-header">
-                <h3>{isRescheduling ? `Reschedule with Dr. ${selectedDoctor.name}` : `Schedule with Dr. ${selectedDoctor.name}`}</h3>
+                <h3>
+                  {isRescheduling
+                    ? `Reschedule with Dr. ${selectedDoctor.name}`
+                    : `Schedule with Dr. ${selectedDoctor.name}`}
+                </h3>
                 <div className="selected-doctor-info">
                   <span className="specialization-tag">{selectedDoctor.specialization}</span>
                 </div>
               </div>
-              
+
               <form onSubmit={handleSubmit} className="booking-form">
                 <div className="form-group">
                   <label htmlFor="time">
@@ -216,9 +228,9 @@ export default function BookAppointment() {
                     value={formData.time}
                     onChange={handleChange}
                     required
-                    aria-label="Appointment Time"
+                    min={minDateTime}
                     disabled={loading}
-                    min={new Date().toISOString().slice(0, 16)}
+                    aria-label="Appointment Time"
                     className="form-input"
                   />
                 </div>
@@ -235,21 +247,21 @@ export default function BookAppointment() {
                     value={formData.reason}
                     onChange={handleChange}
                     required
-                    aria-label="Reason for Visit"
                     disabled={loading}
+                    aria-label="Reason for Visit"
                     className="form-textarea"
                   />
                 </div>
 
-                <button 
-                  type="submit" 
-                  className={`submit-button ${loading ? 'loading' : ''}`} 
+                <button
+                  type="submit"
+                  className={`submit-button ${loading ? 'loading' : ''}`}
                   disabled={loading}
                 >
                   {loading ? (
                     <>
                       <div className="button-spinner"></div>
-                      {isRescheduling ? 'Rescheduling Appointment...' : 'Booking Appointment...'}
+                      {isRescheduling ? 'Rescheduling...' : 'Booking...'}
                     </>
                   ) : (
                     <>
