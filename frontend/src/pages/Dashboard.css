@@ -237,6 +237,8 @@
   margin-bottom: 2rem;
   padding-bottom: 1rem;
   border-bottom: 2px solid #e2e8f0;
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 
 .section-header h3 {
@@ -494,38 +496,201 @@
 }
 
 /* Responsive Design */
+@media (max-width: 1024px) {
+  .dashboard-container {
+    margin: 1.5rem auto;
+    padding: 1.5rem;
+  }
+
+  .dashboard-title {
+    font-size: 2.2rem;
+  }
+
+  .appointments-grid, .reminders-grid {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.25rem;
+  }
+}
+
 @media (max-width: 768px) {
   .dashboard-container {
     margin: 1rem;
     padding: 1.5rem;
+    border-radius: 16px;
+  }
+
+  .dashboard-container::before {
+    height: 3px;
   }
 
   .dashboard-header {
     flex-direction: column;
     align-items: stretch;
     gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .header-content {
+    min-width: auto;
   }
 
   .dashboard-title {
     font-size: 2rem;
+    text-align: center;
   }
 
-  .appointments-grid, .reminders-grid {
-    grid-template-columns: 1fr;
-    gap: 1rem;
+  .dashboard-subtitle {
+    text-align: center;
+    font-size: 1rem;
   }
 
   .book-appointment-btn {
     width: 100%;
     justify-content: center;
+    padding: 0.875rem 1.5rem;
+    font-size: 0.95rem;
+  }
+
+  .btn-icon {
+    font-size: 1.1rem;
+  }
+
+  /* Section improvements */
+  .appointments-section, .reminders-section {
+    padding: 1.25rem;
+    margin-bottom: 1.5rem;
+    border-radius: 12px;
+  }
+
+  .section-header {
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+  }
+
+  .section-header h3 {
+    font-size: 1.5rem;
+  }
+
+  .appointment-count, .reminder-count {
+    font-size: 0.8rem;
+    padding: 0.4rem 0.8rem;
+  }
+
+  /* Grid improvements */
+  .appointments-grid, .reminders-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+
+  /* Card improvements */
+  .appointment-card, .reminder-card {
+    padding: 1.25rem;
+    border-radius: 12px;
+  }
+
+  .card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .doctor-info, .reminder-info {
+    width: 100%;
+    gap: 0.75rem;
+  }
+
+  .doctor-avatar, .reminder-icon {
+    width: 45px;
+    height: 45px;
+    font-size: 1.1rem;
+  }
+
+  .doctor-name, .reminder-medication {
+    font-size: 1rem;
+  }
+
+  .appointment-time, .reminder-time {
+    font-size: 0.85rem;
+  }
+
+  .status-badge {
+    align-self: flex-end;
+    font-size: 0.75rem;
+    padding: 0.3rem 0.6rem;
+  }
+
+  .card-body {
+    margin-bottom: 1.25rem;
+  }
+
+  .reason-container {
+    padding: 0.875rem;
+  }
+
+  .appointment-reason {
+    font-size: 0.9rem;
+    line-height: 1.4;
   }
 
   .card-footer {
     flex-direction: column;
+    gap: 0.5rem;
+    justify-content: stretch;
   }
 
   .card-action-btn {
     width: 100%;
+    padding: 0.625rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  /* Filter improvements */
+  .filter-container {
+    width: 100%;
+    justify-content: space-between;
+    padding: 0.75rem;
+  }
+
+  .filter-label {
+    font-size: 0.9rem;
+  }
+
+  .appointment-filter-dropdown {
+    min-width: 160px;
+    font-size: 0.9rem;
+  }
+
+  /* Empty state improvements */
+  .empty-state {
+    padding: 3rem 1.5rem;
+  }
+
+  .empty-icon {
+    font-size: 3rem;
+  }
+
+  .empty-state h3 {
+    font-size: 1.3rem;
+  }
+
+  .empty-state p {
+    font-size: 1rem;
+  }
+
+  .empty-state-btn {
+    padding: 0.75rem 1.25rem;
+    font-size: 0.95rem;
+  }
+
+  /* Loading and error improvements */
+  .loading-container, .error-container {
+    padding: 2rem 1rem;
+  }
+
+  .loading-text, .error-message {
+    font-size: 1rem;
   }
 }
 
@@ -533,26 +698,155 @@
   .dashboard-container {
     margin: 0.5rem;
     padding: 1rem;
+    border-radius: 12px;
   }
 
   .dashboard-title {
     font-size: 1.8rem;
   }
 
-  .appointment-card, .reminder-card {
-    padding: 1rem;
+  .dashboard-subtitle {
+    font-size: 0.95rem;
   }
 
-  .section-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
+  .book-appointment-btn {
+    padding: 0.75rem 1.25rem;
+    font-size: 0.9rem;
+  }
+
+  /* Section improvements */
+  .appointments-section, .reminders-section {
+    padding: 1rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .section-header h3 {
+    font-size: 1.3rem;
+  }
+
+  .appointment-count, .reminder-count {
+    font-size: 0.75rem;
+    padding: 0.3rem 0.6rem;
+  }
+
+  /* Card improvements */
+  .appointment-card, .reminder-card {
+    padding: 1rem;
   }
 
   .doctor-avatar, .reminder-icon {
     width: 40px;
     height: 40px;
     font-size: 1rem;
+  }
+
+  .doctor-name, .reminder-medication {
+    font-size: 0.95rem;
+  }
+
+  .appointment-time, .reminder-time {
+    font-size: 0.8rem;
+  }
+
+  .status-badge {
+    font-size: 0.7rem;
+    padding: 0.25rem 0.5rem;
+  }
+
+  .reason-container {
+    padding: 0.75rem;
+  }
+
+  .appointment-reason {
+    font-size: 0.85rem;
+  }
+
+  .card-action-btn {
+    padding: 0.5rem 0.875rem;
+    font-size: 0.85rem;
+  }
+
+  /* Filter improvements */
+  .filter-container {
+    padding: 0.625rem;
+    gap: 0.5rem;
+  }
+
+  .filter-label {
+    font-size: 0.85rem;
+  }
+
+  .appointment-filter-dropdown {
+    min-width: 140px;
+    font-size: 0.85rem;
+    padding: 0.4rem 1.5rem 0.4rem 0.6rem;
+  }
+
+  /* Empty state improvements */
+  .empty-state {
+    padding: 2.5rem 1rem;
+  }
+
+  .empty-icon {
+    font-size: 2.5rem;
+  }
+
+  .empty-state h3 {
+    font-size: 1.2rem;
+  }
+
+  .empty-state p {
+    font-size: 0.95rem;
+  }
+
+  .empty-state-btn {
+    padding: 0.625rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  /* Loading and error improvements */
+  .loading-container, .error-container {
+    padding: 1.5rem 0.75rem;
+  }
+
+  .loading-text, .error-message {
+    font-size: 0.95rem;
+  }
+
+  .error-icon {
+    font-size: 1.3rem;
+  }
+}
+
+/* Extra small screens */
+@media (max-width: 360px) {
+  .dashboard-container {
+    margin: 0.25rem;
+    padding: 0.75rem;
+  }
+
+  .dashboard-title {
+    font-size: 1.6rem;
+  }
+
+  .book-appointment-btn {
+    padding: 0.625rem 1rem;
+    font-size: 0.85rem;
+  }
+
+  .appointment-card, .reminder-card {
+    padding: 0.875rem;
+  }
+
+  .doctor-avatar, .reminder-icon {
+    width: 35px;
+    height: 35px;
+    font-size: 0.9rem;
+  }
+
+  .card-action-btn {
+    padding: 0.5rem;
+    font-size: 0.8rem;
   }
 }
 /* Add these styles to your Dashboard.css file */
