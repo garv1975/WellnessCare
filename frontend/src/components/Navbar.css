@@ -1,3 +1,4 @@
+/* ==================== NAVBAR BASE STYLES ==================== */
 .navbar {
   display: flex;
   align-items: center;
@@ -8,11 +9,13 @@
   position: sticky;
   top: 0;
   z-index: 1000;
+  transition: all 0.3s ease;
 }
 
 .navbar-logo {
   font-size: 1.8rem;
   font-weight: 700;
+  z-index: 1001;
 }
 
 .navbar-logo a {
@@ -25,12 +28,14 @@
   color: #3b82f6;
 }
 
+/* ==================== DESKTOP NAVIGATION ==================== */
 .navbar-links {
   display: flex;
   align-items: center;
   list-style: none;
   gap: 2rem;
   margin: 0;
+  padding: 0;
 }
 
 .navbar-links li {
@@ -42,6 +47,22 @@
   text-decoration: none;
   font-weight: 500;
   transition: color 0.3s ease;
+  position: relative;
+}
+
+.navbar-links a::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -5px;
+  left: 0;
+  background-color: #3b82f6;
+  transition: width 0.3s ease;
+}
+
+.navbar-links a:hover::after {
+  width: 100%;
 }
 
 .navbar-links a:hover {
@@ -56,6 +77,7 @@
   font-weight: 500;
   cursor: pointer;
   transition: color 0.3s ease;
+  padding: 0.5rem 1rem;
 }
 
 .navbar-button:hover {
@@ -64,18 +86,22 @@
 
 .login-button {
   background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-  color: white;
+  color: white !important;
   padding: 0.5rem 1rem;
   border-radius: 8px;
   border: none;
   font-weight: 600;
+  transition: all 0.3s ease;
 }
 
 .login-button:hover {
   background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-  color: white;
+  color: white !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
 }
 
+/* ==================== BOOK APPOINTMENT BUTTON ==================== */
 .book-appointment-btn {
   background: linear-gradient(135deg, #10b981 0%, #059669 100%);
   color: white;
@@ -91,6 +117,7 @@
   position: relative;
   overflow: hidden;
   transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.2);
 }
 
 .book-appointment-btn:hover {
@@ -135,50 +162,320 @@
   100% { transform: translateY(-20px) scale(0); opacity: 0; }
 }
 
-.navbar-hamburger {
+/* ==================== HAMBURGER MENU ==================== */
+.hamburger-menu {
+  display: none;
   background: none;
   border: none;
   cursor: pointer;
-  display: none;
+  padding: 0.5rem;
+  z-index: 1001;
+  transition: all 0.3s ease;
 }
 
 .hamburger-icon {
-  width: 24px;
+  width: 28px;
   height: 24px;
-  color: #475569;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
+.hamburger-icon span {
+  display: block;
+  height: 3px;
+  width: 100%;
+  background-color: #475569;
+  border-radius: 3px;
+  transition: all 0.3s ease;
+}
+
+.hamburger-menu.active .hamburger-icon span:nth-child(1) {
+  transform: translateY(10px) rotate(45deg);
+}
+
+.hamburger-menu.active .hamburger-icon span:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger-menu.active .hamburger-icon span:nth-child(3) {
+  transform: translateY(-11px) rotate(-45deg);
+}
+
+/* ==================== MOBILE MENU OVERLAY ==================== */
+.mobile-menu-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 998;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.mobile-menu-overlay.active {
+  opacity: 1;
+}
+
+/* ==================== MOBILE MENU SIDEBAR ==================== */
+.mobile-menu {
+  display: none;
+  position: fixed;
+  top: 0;
+  right: -100%;
+  width: 80%;
+  max-width: 320px;
+  height: 100%;
+  background: linear-gradient(135deg, #ffffff 0%, #f8fbff 100%);
+  box-shadow: -4px 0 20px rgba(0, 0, 0, 0.1);
+  z-index: 999;
+  transition: right 0.3s ease;
+  overflow-y: auto;
+}
+
+.mobile-menu.active {
+  right: 0;
+}
+
+.mobile-menu-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem 1.5rem;
+  border-bottom: 1px solid rgba(0, 82, 204, 0.1);
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+}
+
+.mobile-menu-logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.mobile-menu-logo a {
+  color: white;
+  text-decoration: none;
+}
+
+.mobile-menu-close {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  font-size: 1.8rem;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.mobile-menu-close:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: rotate(90deg);
+}
+
+.mobile-menu-content {
+  padding: 1rem 0;
+}
+
+.mobile-menu-links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.mobile-menu-links li {
+  margin: 0;
+}
+
+.mobile-menu-links a,
+.mobile-menu-links button {
+  display: block;
+  padding: 1rem 1.5rem;
+  color: #1e293b;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+}
+
+.mobile-menu-links a:hover,
+.mobile-menu-links button:hover {
+  background-color: rgba(59, 130, 246, 0.1);
+  color: #3b82f6;
+  padding-left: 2rem;
+}
+
+.mobile-logout-btn,
+.mobile-login-btn {
+  margin: 0.5rem 1.5rem;
+  padding: 0.75rem 1.5rem !important;
+  border-radius: 8px;
+  font-weight: 600;
+  width: calc(100% - 3rem) !important;
+  text-align: center !important;
+}
+
+.mobile-logout-btn {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white !important;
+}
+
+.mobile-logout-btn:hover {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  padding-left: 1.5rem !important;
+}
+
+.mobile-login-btn {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  color: white !important;
+}
+
+.mobile-login-btn:hover {
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  padding-left: 1.5rem !important;
+}
+
+.mobile-book-btn {
+  margin: 1rem 1.5rem 0.5rem;
+  padding: 0.75rem 1.5rem !important;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white !important;
+  border-radius: 50px;
+  font-weight: 600;
+  width: calc(100% - 3rem) !important;
+  text-align: center !important;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+}
+
+.mobile-book-btn:hover {
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+  padding-left: 1.5rem !important;
+  transform: scale(1.02);
+}
+
+/* ==================== VISIBILITY CLASSES ==================== */
 .desktop-only {
   display: block;
+}
+
+.desktop-nav {
+  display: flex;
 }
 
 .mobile-only {
   display: none;
 }
 
+/* ==================== RESPONSIVE BREAKPOINTS ==================== */
+@media (max-width: 1024px) {
+  .navbar-links {
+    gap: 1.5rem;
+  }
+  
+  .book-appointment-btn {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.95rem;
+  }
+}
+
 @media (max-width: 768px) {
   .navbar {
-    padding: 1rem;
+    padding: 1rem 1.5rem;
   }
 
-  .navbar-links {
-    display: none; /* Hide links on mobile, rely on sidebar */
+  .navbar-logo {
+    font-size: 1.5rem;
   }
 
-  .navbar-hamburger {
-    display: block;
+  /* Hide desktop navigation */
+  .desktop-nav {
+    display: none !important;
   }
 
   .desktop-only {
-    display: none;
+    display: none !important;
+  }
+
+  /* Show mobile elements */
+  .hamburger-menu {
+    display: block;
+  }
+
+  .mobile-menu-overlay {
+    display: block;
+  }
+
+  .mobile-menu {
+    display: block;
   }
 
   .mobile-only {
     display: block;
   }
+}
 
-  .book-appointment-btn {
-    padding: 0.5rem 1rem;
-    font-size: 0.9rem;
+@media (max-width: 480px) {
+  .navbar {
+    padding: 0.75rem 1rem;
   }
+
+  .navbar-logo {
+    font-size: 1.3rem;
+  }
+
+  .mobile-menu {
+    width: 85%;
+    max-width: 280px;
+  }
+
+  .mobile-menu-header {
+    padding: 1.25rem 1rem;
+  }
+
+  .mobile-menu-logo {
+    font-size: 1.3rem;
+  }
+
+  .mobile-menu-links a,
+  .mobile-menu-links button {
+    padding: 0.875rem 1.25rem;
+    font-size: 0.95rem;
+  }
+}
+
+/* ==================== ACCESSIBILITY ==================== */
+@media (prefers-reduced-motion: reduce) {
+  .navbar,
+  .navbar-links a,
+  .hamburger-menu,
+  .hamburger-icon span,
+  .mobile-menu,
+  .mobile-menu-overlay,
+  .mobile-menu-close,
+  .mobile-menu-links a,
+  .mobile-menu-links button,
+  .book-appointment-btn {
+    transition: none;
+  }
+}
+
+/* Focus styles for accessibility */
+.hamburger-menu:focus,
+.mobile-menu-close:focus,
+.mobile-menu-links a:focus,
+.mobile-menu-links button:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
 }

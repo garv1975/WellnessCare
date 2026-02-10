@@ -15,10 +15,10 @@ export default function Navbar() {
   const isDoctorLoggedIn = !!doctorToken && doctorRole === 'doctor';
   const isLoggedIn = isPatientLoggedIn || isDoctorLoggedIn;
 
-  console.log('Navbar state:', { isPatientLoggedIn, isDoctorLoggedIn, isLoggedIn, doctorRole }); // Debug log
+  console.log('Navbar state:', { isPatientLoggedIn, isDoctorLoggedIn, isLoggedIn, doctorRole });
 
   const handleLogout = async () => {
-    console.log('Initiating logout...'); // Debug log
+    console.log('Initiating logout...');
     try {
       await API.post('/auth/logout');
       clearLocalStorage();
@@ -46,7 +46,7 @@ export default function Navbar() {
   };
 
   const handleBookAppointment = () => {
-    console.log('Book Appointment clicked, isLoggedIn:', isLoggedIn); // Debug log
+    console.log('Book Appointment clicked, isLoggedIn:', isLoggedIn);
     if (isLoggedIn) {
       navigate('/book-appointment');
     } else {
@@ -55,7 +55,7 @@ export default function Navbar() {
   };
 
   const handleDashboardClick = (e) => {
-    console.log('Dashboard clicked, isLoggedIn:', isLoggedIn, 'doctorRole:', doctorRole); // Debug log
+    console.log('Dashboard clicked, isLoggedIn:', isLoggedIn, 'doctorRole:', doctorRole);
     if (!isLoggedIn) {
       e.preventDefault();
       navigate('/login', { state: { from: { pathname: isDoctorLoggedIn ? '/doctor/dashboard' : '/dashboard' } } });
@@ -67,14 +67,14 @@ export default function Navbar() {
   };
 
   const handlePatientLogin = () => {
-    console.log('Patient Login clicked'); // Debug log
+    console.log('Patient Login clicked');
     clearLocalStorage();
     setIsMobileMenuOpen(false);
     navigate('/login');
   };
 
   const handleDoctorLogin = () => {
-    console.log('Doctor Login clicked'); // Debug log
+    console.log('Doctor Login clicked');
     clearLocalStorage();
     setIsMobileMenuOpen(false);
     navigate('/doctor/login');
