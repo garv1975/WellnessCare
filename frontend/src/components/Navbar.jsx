@@ -113,7 +113,7 @@ export default function Navbar() {
                 </Link>
               </li>
               <li>
-                <button onClick={handleLogout} className="navbar-button">
+                <button onClick={handleLogout} className="navbar-button logout-button">
                   Logout
                 </button>
               </li>
@@ -177,7 +177,7 @@ export default function Navbar() {
             onClick={closeMobileMenu}
             aria-label="Close menu"
           >
-            ✕
+            ×
           </button>
         </div>
         <div className="mobile-menu-content">
