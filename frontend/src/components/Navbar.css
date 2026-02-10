@@ -252,6 +252,8 @@
   z-index: 999;
   transition: right 0.3s ease;
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
 }
 
 .mobile-menu.active {
@@ -267,6 +269,7 @@
   background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
   gap: 1rem;
   min-height: 70px;
+  flex-shrink: 0;
 }
 
 .mobile-menu-logo {
@@ -316,6 +319,8 @@
 
 .mobile-menu-content {
   padding: 1rem 0;
+  flex: 1;
+  overflow-y: auto;
 }
 
 .mobile-menu-links {
@@ -351,7 +356,6 @@
   padding-left: 2rem;
 }
 
-.mobile-logout-btn,
 .mobile-login-btn {
   margin: 0.5rem 1.5rem;
   padding: 0.75rem 1.5rem !important;
@@ -359,19 +363,6 @@
   font-weight: 600;
   width: calc(100% - 3rem) !important;
   text-align: center !important;
-}
-
-.mobile-logout-btn {
-  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-  color: white !important;
-}
-
-.mobile-logout-btn:hover {
-  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
-  padding-left: 1.5rem !important;
-}
-
-.mobile-login-btn {
   background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
   color: white !important;
 }
@@ -401,6 +392,48 @@
   background: linear-gradient(135deg, #059669 0%, #047857 100%);
   padding-left: 1.5rem !important;
   transform: scale(1.02);
+}
+
+/* ==================== MOBILE MENU FOOTER (LOGOUT BUTTON) ==================== */
+.mobile-menu-footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid rgba(0, 82, 204, 0.1);
+  background: linear-gradient(135deg, #f8fbff 0%, #ffffff 100%);
+  flex-shrink: 0;
+  margin-top: auto;
+}
+
+.mobile-logout-btn-footer {
+  width: 100%;
+  padding: 0.875rem 1.5rem;
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+}
+
+.mobile-logout-btn-footer:hover {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+}
+
+.mobile-logout-btn-footer:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 10px rgba(239, 68, 68, 0.3);
+}
+
+.logout-icon {
+  font-size: 1.2rem;
 }
 
 /* ==================== VISIBILITY CLASSES ==================== */
@@ -456,7 +489,7 @@
   }
 
   .mobile-menu {
-    display: block;
+    display: flex;
   }
 
   .mobile-only {
@@ -491,6 +524,11 @@
     padding: 0.875rem 1.25rem;
     font-size: 0.95rem;
   }
+
+  .mobile-logout-btn-footer {
+    font-size: 0.95rem;
+    padding: 0.75rem 1.25rem;
+  }
 }
 
 /* ==================== ACCESSIBILITY ==================== */
@@ -504,7 +542,8 @@
   .mobile-menu-close,
   .mobile-menu-links a,
   .mobile-menu-links button,
-  .book-appointment-btn {
+  .book-appointment-btn,
+  .mobile-logout-btn-footer {
     transition: none;
   }
 }
@@ -513,7 +552,8 @@
 .hamburger-menu:focus,
 .mobile-menu-close:focus,
 .mobile-menu-links a:focus,
-.mobile-menu-links button:focus {
+.mobile-menu-links button:focus,
+.mobile-logout-btn-footer:focus {
   outline: 2px solid #3b82f6;
   outline-offset: 2px;
 }

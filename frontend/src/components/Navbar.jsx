@@ -200,26 +200,20 @@ export default function Navbar() {
             <li>
               <Link to="/faqs" onClick={closeMobileMenu}>FAQs</Link>
             </li>
-            {isLoggedIn ? (
-              <>
-                <li>
-                  <Link
-                    to={isDoctorLoggedIn ? '/doctor/dashboard' : '/dashboard'}
-                    onClick={(e) => {
-                      handleDashboardClick(e);
-                      closeMobileMenu();
-                    }}
-                  >
-                    {isDoctorLoggedIn ? 'Doctor Dashboard' : 'Dashboard'}
-                  </Link>
-                </li>
-                <li>
-                  <button onClick={handleLogout} className="mobile-logout-btn">
-                    Logout
-                  </button>
-                </li>
-              </>
-            ) : (
+            {isLoggedIn && (
+              <li>
+                <Link
+                  to={isDoctorLoggedIn ? '/doctor/dashboard' : '/dashboard'}
+                  onClick={(e) => {
+                    handleDashboardClick(e);
+                    closeMobileMenu();
+                  }}
+                >
+                  {isDoctorLoggedIn ? 'Doctor Dashboard' : 'Dashboard'}
+                </Link>
+              </li>
+            )}
+            {!isLoggedIn && (
               <>
                 <li>
                   <button onClick={handlePatientLogin} className="mobile-login-btn">
@@ -235,6 +229,16 @@ export default function Navbar() {
             )}
           </ul>
         </div>
+        
+        {/* Logout Button at Bottom - Only shown when logged in */}
+        {isLoggedIn && (
+          <div className="mobile-menu-footer">
+            <button onClick={handleLogout} className="mobile-logout-btn-footer">
+              <span className="logout-icon">🚪</span>
+              <span>Logout</span>
+            </button>
+          </div>
+        )}
       </div>
     </>
   );
