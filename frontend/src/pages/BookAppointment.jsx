@@ -139,77 +139,135 @@ export default function BookAppointment() {
     }
   };
 
-  return (
+ return (
     <div className="book-appointment-container">
       <div className="header-section">
-        <h2 className="page-title">
-          {isRescheduling ? 'Reschedule Your Appointment' : 'Book Your Appointment'}
-        </h2>
-        <p className="page-subtitle">
-          Choose from our expert healthcare professionals
-        </p>
+        <h2 className="page-title">{isRescheduling ? 'Reschedule Your Appointment' : 'Book Your Appointment'}</h2>
+        <p className="page-subtitle">Choose from our expert healthcare professionals</p>
       </div>
 
       {error && (
-        <div className="error-message">
-          ⚠️ {error}
+        <div className="error-message slide-down">
+          <div className="error-icon">⚠️</div>
+          <span>{error}</span>
         </div>
       )}
 
       <div className="content-wrapper">
         <div className="doctors-section">
-          <h3>Select a Doctor</h3>
+          <h3 className="section-title">Select a Doctor</h3>
           <div className="doctors-grid">
-            {doctors.map((doctor) => (
+            {doctors.length === 0 && !error && (
+              <div className="loading-container">
+                <div className="loading-spinner"></div>
+                <p>Loading our expert doctors...</p>
+              </div>
+            )}
+            {doctors.map((doctor, index) => (
               <div
                 key={doctor.id}
                 className={`doctor-card ${selectedDoctor?.id === doctor.id ? 'selected' : ''}`}
                 onClick={() => handleDoctorSelect(doctor)}
+                onKeyDown={(e) => e.key === 'Enter' && handleDoctorSelect(doctor)}
+                role="button"
+                tabIndex={0}
+                aria-label={`Select ${doctor.name}, ${doctor.specialization}`}
+                style={{ animationDelay: `${index * 0.1}s` }}
               >
-                <h4>{doctor.name}</h4>
-                <p>{doctor.specialization}</p>
-                <span>{doctor.availability}</span>
+                <div className="doctor-avatar">
+                  <span className="avatar-icon">👨‍⚕️</span>
+                </div>
+                <div className="doctor-info">
+                  <h4 className="doctor-name">{doctor.name}</h4>
+                  <p className="doctor-specialization">{doctor.specialization}</p>
+                  <div className="availability-badge">
+                    <span className="availability-dot"></span>
+                    {doctor.availability}
+                  </div>
+                </div>
+                <div className="selection-indicator">
+                  <div className="checkmark">✓</div>
+                </div>
               </div>
             ))}
           </div>
         </div>
 
-        {selectedDoctor && (
-          <form onSubmit={handleSubmit} className="booking-form">
-            <label>
-              Appointment Date & Time
-              <input
-                type="datetime-local"
-                name="time"
-                value={formData.time}
-                onChange={handleChange}
-                required
-                min={minDateTime}
-                disabled={loading}
-              />
-            </label>
+        <div className={`form-section ${isFormVisible ? 'visible' : ''}`}>
+          {selectedDoctor ? (
+            <div className="appointment-form">
+              <div className="form-header">
+                <h3>{isRescheduling ? `Reschedule with Dr. ${selectedDoctor.name}` : `Schedule with Dr. ${selectedDoctor.name}`}</h3>
+                <div className="selected-doctor-info">
+                  <span className="specialization-tag">{selectedDoctor.specialization}</span>
+                </div>
+              </div>
+              
+              <form onSubmit={handleSubmit} className="booking-form">
+                <div className="form-group">
+                  <label htmlFor="time">
+                    <span className="label-icon">📅</span>
+                    Appointment Date & Time
+                  </label>
+                  <input
+                    type="datetime-local"
+                    id="time"
+                    name="time"
+                    value={formData.time}
+                    onChange={handleChange}
+                    required
+                    aria-label="Appointment Time"
+                    disabled={loading}
+                    min={new Date().toISOString().slice(0, 16)}
+                    className="form-input"
+                  />
+                </div>
 
-            <label>
-              Reason
-              <textarea
-                name="reason"
-                value={formData.reason}
-                onChange={handleChange}
-                required
-                disabled={loading}
-              />
-            </label>
+                <div className="form-group">
+                  <label htmlFor="reason">
+                    <span className="label-icon">📝</span>
+                    Reason for Visit
+                  </label>
+                  <textarea
+                    id="reason"
+                    name="reason"
+                    placeholder="Please describe your symptoms or reason for the visit..."
+                    value={formData.reason}
+                    onChange={handleChange}
+                    required
+                    aria-label="Reason for Visit"
+                    disabled={loading}
+                    className="form-textarea"
+                  />
+                </div>
 
-            <button type="submit" disabled={loading}>
-              {loading
-                ? 'Processing...'
-                : isRescheduling
-                  ? 'Reschedule Appointment'
-                  : 'Book Appointment'
-              }
-            </button>
-          </form>
-        )}
+                <button 
+                  type="submit" 
+                  className={`submit-button ${loading ? 'loading' : ''}`} 
+                  disabled={loading}
+                >
+                  {loading ? (
+                    <>
+                      <div className="button-spinner"></div>
+                      {isRescheduling ? 'Rescheduling Appointment...' : 'Booking Appointment...'}
+                    </>
+                  ) : (
+                    <>
+                      <span className="button-icon">📋</span>
+                      {isRescheduling ? 'Reschedule Appointment' : 'Book Appointment'}
+                    </>
+                  )}
+                </button>
+              </form>
+            </div>
+          ) : (
+            <div className="select-doctor-prompt">
+              <div className="prompt-icon">👆</div>
+              <h3>Select a Doctor</h3>
+              <p>Choose from our qualified healthcare professionals above to schedule your appointment.</p>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
